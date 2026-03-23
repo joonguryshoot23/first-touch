@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>김민준 코치 프로필 — First Touch</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-left">
+        <a href="index.html" class="nav-logo">
+          <span class="ball">⚽</span> First<span>Touch</span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="index.html">레슨 찾기</a></li>
+          <li><a href="community.html">커뮤니티</a></li>
+        </ul>
+      </div>
+      <div class="nav-actions">
+        <button class="btn-outline">로그인</button>
+        <button class="btn-outline">회원가입</button>
+        <a href="register-coach.html" class="btn-coach-reg">코치 등록</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== BREADCRUMB ===== -->
+  <div style="padding: 80px 0 0; background: var(--navy);">
+    <div class="container">
+      <p style="font-size:0.8rem; color: var(--text-muted); padding: 16px 0;">
+        <a href="index.html" style="color:var(--text-muted);">홈</a> &nbsp;›&nbsp;
+        <a href="index.html#browse" style="color:var(--text-muted);">코치 찾기</a> &nbsp;›&nbsp;
+        <span style="color:var(--text-secondary);">김민준 코치</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== DETAIL LAYOUT ===== -->
+  <section class="detail-hero">
+    <div class="container">
+      <div class="detail-layout">
+
+        <!-- ===== LEFT: Coach Profile ===== -->
+        <div class="coach-detail-left">
+
+          <!-- Profile Header -->
+          <div class="coach-profile-header">
+            <div class="coach-avatar-lg">김</div>
+            <div class="coach-info">
+              <h1>김민준</h1>
+              <p class="subtitle">⚽ 슈팅 · 드리블 전문 코치 &nbsp;|&nbsp; 📍 서울 강남/서초/송파</p>
+              <div class="coach-tags">
+                <span class="tag">🎯 슈팅</span>
+                <span class="tag">⚡ 드리블</span>
+                <span class="tag blue">🔁 패싱</span>
+                <span class="coach-badge pro" style="position:static;border-radius:100px;font-size:0.72rem;padding:3px 12px;">PRO</span>
+                <span class="coach-badge" style="position:static;border-radius:100px;font-size:0.72rem;padding:3px 12px;background:rgba(0,188,212,0.9);">자격증 인증</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="stats-row">
+            <div class="stat-box"><div class="val">4.97</div><div class="lbl">평균 평점</div></div>
+            <div class="stat-box"><div class="val">213</div><div class="lbl">누적 후기</div></div>
+            <div class="stat-box"><div class="val">8년</div><div class="lbl">지도 경력</div></div>
+            <div class="stat-box"><div class="val">98%</div><div class="lbl">응답률</div></div>
+          </div>
+
+          <!-- Tabs -->
+          <div class="detail-tabs">
+            <button class="tab-btn active" data-tab="profile">소개</button>
+            <button class="tab-btn" data-tab="credentials">이력 &amp; 자격증</button>
+            <button class="tab-btn" data-tab="curriculum">커리큘럼</button>
+            <button class="tab-btn" data-tab="reviews">후기 (213)</button>
+          </div>
+
+          <!-- TAB: 소개 -->
+          <div class="tab-panel active" id="tab-profile">
+            <div class="credentials-section">
+              <h3>👋 코치 소개</h3>
+              <p style="color:var(--text-secondary); line-height:1.8; font-size:0.9rem;">
+                안녕하세요, First Touch에서 활동 중인 김민준 코치입니다.<br><br>
+                K리그에서 8년간 선수 생활을 한 후, 현재는 개인 레슨 코치로 활동하고 있습니다.
+                슈팅 폼 교정부터 드리블 패턴, 1:1 돌파 기술까지 체계적으로 가르쳐드립니다.<br><br>
+                수강생의 현재 레벨을 먼저 파악한 후, 맞춤 커리큘럼을 제안해드립니다.
+                첫 레슨은 현재 수준 진단과 목표 설정으로 진행됩니다.
+              </p>
+            </div>
+            <div class="credentials-section">
+              <h3>📌 레슨 정보</h3>
+              <div class="cred-list">
+                <div class="cred-item">
+                  <div class="cred-icon">📍</div>
+                  <div class="cred-body">
+                    <div class="cred-title">활동 지역</div>
+                    <div class="cred-meta">서울 강남구 · 서초구 · 송파구 / 협의 가능</div>
+                  </div>
+                </div>
+                <div class="cred-item">
+                  <div class="cred-icon">👥</div>
+                  <div class="cred-body">
+                    <div class="cred-title">레슨 유형</div>
+                    <div class="cred-meta">1:1 개인 레슨 / 2인 그룹 가능 (가격 협의)</div>
+                  </div>
+                </div>
+                <div class="cred-item">
+                  <div class="cred-icon">🎯</div>
+                  <div class="cred-body">
+                    <div class="cred-title">대상</div>
+                    <div class="cred-meta">중학생 이상 / 입문자 ~ 동호회 수준 / 구단 소속 제외</div>
+                  </div>
+                </div>
+                <div class="cred-item">
+                  <div class="cred-icon">🏟️</div>
+                  <div class="cred-body">
+                    <div class="cred-title">구장</div>
+                    <div class="cred-meta">플랫폼 제휴 구장 중 선택 가능 (레슨+구장 통합 결제 지원)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: 이력 & 자격증 -->
+          <div class="tab-panel" id="tab-credentials">
+            <div class="credentials-section">
+              <h3>🏆 선수 경력</h3>
+              <div class="cred-list">
+                <div class="cred-item">
+                  <div class="cred-icon">⚽</div>
+                  <div class="cred-body">
+                    <div class="cred-title">인천 유나이티드 (K리그1)</div>
+                    <div class="cred-meta">2019 – 2021 · 미드필더 · 정규 출전 41경기</div>
+                  </div>
+                  <div class="cred-badge">인증</div>
+                </div>
+                <div class="cred-item">
+                  <div class="cred-icon">⚽</div>
+                  <div class="cred-body">
+                    <div class="cred-title">성남 FC (K리그2)</div>
+                    <div class="cred-meta">2015 – 2018 · 미드필더 · 정규 출전 52경기</div>
+                  </div>
+                  <div class="cred-badge">인증</div>
+                </div>
+                <div class="cred-item">
+                  <div class="cred-icon">⚽</div>
+                  <div class="cred-body">
+                    <div class="cred-title">FC 서울 유스 아카데미</div>
+                    <div class="cred-meta">2010 – 2014</div>
+                  </div>
+                  <div class="cred-badge">이력</div>
+                </div>
+              </div>
+            </div>
+            <div class="credentials-section">
+              <h3>📋 자격증</h3>
+              <div class="cred-list">
+                <div class="cred-item">
+                  <div class="cred-icon">🏅</div>
+                  <div class="cred-body">
+                    <div class="cred-title">AFC B급 지도자 자격증</div>
+                    <div class="cred-meta">아시아축구연맹 (AFC) · 2022년 취득</div>
+                  </div>
+                  <div class="cred-badge">인증완료</div>
+                </div>
+                <div class="cred-item">
+                  <div class="cred-icon">🏅</div>
+                  <div class="cred-body">
+                    <div class="cred-title">대한축구협회 (KFA) C급 자격증</div>
+                    <div class="cred-meta">대한축구협회 · 2021년 취득</div>
+                  </div>
+                  <div class="cred-badge">인증완료</div>
+                </div>
+                <div class="cred-item">
+                  <div class="cred-icon">🎓</div>
+                  <div class="cred-body">
+                    <div class="cred-title">스포츠과학 학사 (체육교육 전공)</div>
+                    <div class="cred-meta">한국체육대학교 · 졸업</div>
+                  </div>
+                  <div class="cred-badge">인증완료</div>
+                </div>
+                <div class="cred-item">
+                  <div class="cred-icon">🩺</div>
+                  <div class="cred-body">
+                    <div class="cred-title">스포츠 응급처치 (CPR/AED)</div>
+                    <div class="cred-meta">대한적십자사 · 2023년 갱신</div>
+                  </div>
+                  <div class="cred-badge">인증완료</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: 커리큘럼 -->
+          <div class="tab-panel" id="tab-curriculum">
+            <div class="credentials-section">
+              <h3>📚 슈팅 집중 커리큘럼 (8회 기준)</h3>
+              <div class="cred-list">
+                <div class="cred-item"><div class="cred-icon">1</div><div class="cred-body"><div class="cred-title">레벨 진단 & 목표 설정</div><div class="cred-meta">현재 자세 촬영 분석 · 약점 파악 · 목표 합의</div></div></div>
+                <div class="cred-item"><div class="cred-icon">2</div><div class="cred-body"><div class="cred-title">기초 자세 교정 & 볼 터치</div><div class="cred-meta">올바른 임팩트 자세 확립 · 발 부위별 볼 컨트롤</div></div></div>
+                <div class="cred-item"><div class="cred-icon">3-4</div><div class="cred-body"><div class="cred-title">인스텝 킥 & 인사이드 킥</div><div class="cred-meta">강력한 슈팅 파워 훈련 · 정확도 병행</div></div></div>
+                <div class="cred-item"><div class="cred-icon">5-6</div><div class="cred-body"><div class="cred-title">드리블 돌파 후 슈팅</div><div class="cred-meta">1:1 상황 / 2:1 상황 슈팅 타이밍 훈련</div></div></div>
+                <div class="cred-item"><div class="cred-icon">7-8</div><div class="cred-body"><div class="cred-title">실전 패턴 & 마무리</div><div class="cred-meta">실전 경기 상황 적용 + 영상 분석 피드백</div></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: 후기 -->
+          <div class="tab-panel" id="tab-reviews">
+            <div class="detail-reviews">
+              <div class="detail-review-card">
+                <div class="review-stars" style="color:#FFD600;margin-bottom:8px;">★★★★★</div>
+                <p class="review-text">"슈팅 폼이 완전히 바뀌었어요. 코치님이 제 영상을 직접 분석해주셔서 어디가 문제인지 바로 알 수 있었습니다. 구장도 코치님이 알아서 연결해줘서 편했어요."</p>
+                <div class="review-author" style="margin-top:12px;">
+                  <div class="review-avatar">이</div>
+                  <div><div class="review-name">이준혁 · 슈팅 8회</div><div class="review-date">2026년 2월</div></div>
+                </div>
+              </div>
+              <div class="detail-review-card">
+                <div class="review-stars" style="color:#FFD600;margin-bottom:8px;">★★★★★</div>
+                <p class="review-text">"레슨 요청 후 1시간도 안 돼서 답변이 왔고, 일정도 바로 잡혔어요. 레슨 퀄리티가 높아서 주변 친구들한테도 추천했습니다."</p>
+                <div class="review-author" style="margin-top:12px;">
+                  <div class="review-avatar">김</div>
+                  <div><div class="review-name">김태희 · 월정기 패키지</div><div class="review-date">2026년 1월</div></div>
+                </div>
+              </div>
+              <div class="detail-review-card">
+                <div class="review-stars" style="color:#FFD600;margin-bottom:8px;">★★★★☆</div>
+                <p class="review-text">"체험 레슨 한 번에 바로 월정기 등록했어요. First Touch 앱에서 레슨비+구장비 통합 결제가 되니까 따로 구장 예약할 필요가 없어서 너무 편합니다."</p>
+                <div class="review-author" style="margin-top:12px;">
+                  <div class="review-avatar">박</div>
+                  <div><div class="review-name">박도현 · 체험 레슨</div><div class="review-date">2025년 12월</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /left -->
+
+        <!-- ===== RIGHT: Booking Widget ===== -->
+        <div class="booking-widget">
+          <h3>레슨 요청하기</h3>
+          <div class="price-display">₩65,000 <small>/ 60분부터</small></div>
+
+          <!-- Step 1: Plan -->
+          <p class="booking-step-label">① 레슨 유형</p>
+          <div class="plan-select">
+            <label class="plan-option selected" id="plan-trial">
+              <input type="radio" name="plan" value="trial" checked />
+              <span class="plan-option-name">체험 레슨 (60분)</span>
+              <span class="plan-option-price">₩65,000</span>
+            </label>
+            <label class="plan-option" id="plan-monthly">
+              <input type="radio" name="plan" value="monthly" />
+              <span class="plan-option-name">정기 패키지 8회</span>
+              <span class="plan-option-price">₩440,000</span>
+            </label>
+            <label class="plan-option" id="plan-camp">
+              <input type="radio" name="plan" value="camp" />
+              <span class="plan-option-name">집중 캠프 4회</span>
+              <span class="plan-option-price">₩260,000</span>
+            </label>
+          </div>
+
+          <!-- Step 2: Calendar -->
+          <p class="booking-step-label">② 날짜 선택</p>
+          <div class="calendar-section">
+            <div class="calendar">
+              <div class="cal-header">
+                <button class="cal-nav" id="cal-prev">‹</button>
+                <span id="cal-title">2026년 3월</span>
+                <button class="cal-nav" id="cal-next">›</button>
+              </div>
+              <div class="cal-grid" id="cal-grid">
+                <div class="cal-dow">일</div>
+                <div class="cal-dow">월</div>
+                <div class="cal-dow">화</div>
+                <div class="cal-dow">수</div>
+                <div class="cal-dow">목</div>
+                <div class="cal-dow">금</div>
+                <div class="cal-dow">토</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Time -->
+          <div class="time-section" id="time-section">
+            <p class="booking-step-label">③ 시간 선택</p>
+            <div class="time-grid">
+              <div class="time-slot" data-time="09:00">09:00</div>
+              <div class="time-slot" data-time="10:00">10:00</div>
+              <div class="time-slot full" data-time="11:00">11:00</div>
+              <div class="time-slot" data-time="14:00">14:00</div>
+              <div class="time-slot" data-time="15:00">15:00</div>
+              <div class="time-slot full" data-time="16:00">16:00</div>
+              <div class="time-slot" data-time="17:00">17:00</div>
+              <div class="time-slot" data-time="18:00">18:00</div>
+              <div class="time-slot" data-time="19:00">19:00</div>
+            </div>
+          </div>
+
+          <!-- Step 4: Venue (optional) -->
+          <div class="venue-section" id="venue-section">
+            <p class="booking-step-label">④ 구장 선택 <span style="color:var(--text-muted);font-weight:400;">(선택사항)</span></p>
+            <label class="venue-option" id="venue-1">
+              <input type="radio" name="venue" value="v1" />
+              <div class="venue-info">
+                <div class="venue-name">강남 풋살파크 A구장</div>
+                <div class="venue-detail">서울 강남구 · 인조잔디 · 주차 가능</div>
+              </div>
+              <span class="venue-price">+₩20,000</span>
+            </label>
+            <label class="venue-option" id="venue-2">
+              <input type="radio" name="venue" value="v2" />
+              <div class="venue-info">
+                <div class="venue-name">역삼 스포츠센터 풋살장</div>
+                <div class="venue-detail">서울 강남구 · 실내 코트 · 샤워실 완비</div>
+              </div>
+              <span class="venue-price">+₩30,000</span>
+            </label>
+            <label class="venue-option" id="venue-3">
+              <input type="radio" name="venue" value="v3" />
+              <div class="venue-info">
+                <div class="venue-name">잠실 드림 풋볼파크</div>
+                <div class="venue-detail">서울 송파구 · 천연잔디 · 관중석 있음</div>
+              </div>
+              <span class="venue-price">+₩40,000</span>
+            </label>
+          </div>
+
+          <!-- Summary -->
+          <div class="booking-summary" id="booking-summary">
+            <div class="summary-row">
+              <span class="summary-label">레슨</span>
+              <span id="summary-lesson">—</span>
+            </div>
+            <div class="summary-row" id="summary-date-row" style="display:none;">
+              <span class="summary-label">일시</span>
+              <span id="summary-date">—</span>
+            </div>
+            <div class="summary-row" id="summary-venue-row" style="display:none;">
+              <span class="summary-label">구장</span>
+              <span id="summary-venue">—</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">합계</span>
+              <span id="summary-total">—</span>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <button class="btn-book" id="btn-book" disabled>날짜를 선택해주세요</button>
+          <p class="booking-note">무료 취소 · 레슨 48시간 전까지</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>

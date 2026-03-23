@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>First Touch — 축구 레슨 전문 매칭 플랫폼</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-left">
+        <a href="index.html" class="nav-logo">
+          <span class="ball">⚽</span> First<span>Touch</span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-active">레슨 찾기</a></li>
+          <li><a href="community.html">커뮤니티</a></li>
+        </ul>
+      </div>
+      <div class="nav-actions">
+        <button class="btn-outline">로그인</button>
+        <button class="btn-outline">회원가입</button>
+        <a href="register-coach.html" class="btn-coach-reg">코치 등록</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== SEARCH HERO ===== -->
+  <section class="search-hero">
+    <div class="container">
+      <h1>나에게 맞는 <em>축구 코치</em>를 찾아보세요</h1>
+      <p>검증된 코치와 1:1 레슨 · 레슨 + 구장 통합 예약</p>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="코치 이름, 스킬, 지역 검색..." class="search-input" />
+        <select class="search-select">
+          <option>지역 전체</option>
+          <option>서울</option>
+          <option>경기</option>
+          <option>인천</option>
+          <option>부산</option>
+          <option>대구</option>
+          <option>대전</option>
+        </select>
+        <button class="btn-primary search-btn">검색</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CATEGORY TABS ===== -->
+  <section class="category-section">
+    <div class="container">
+      <div class="category-tabs">
+        <button class="cat-btn active" data-cat="all"><span class="cat-icon">⚽</span> 전체</button>
+        <button class="cat-btn" data-cat="shooting"><span class="cat-icon">🎯</span> 슈팅</button>
+        <button class="cat-btn" data-cat="dribble"><span class="cat-icon">⚡</span> 드리블</button>
+        <button class="cat-btn" data-cat="defense"><span class="cat-icon">🛡️</span> 수비</button>
+        <button class="cat-btn" data-cat="goalkeeper"><span class="cat-icon">🧤</span> 골키퍼</button>
+        <button class="cat-btn" data-cat="passing"><span class="cat-icon">🔁</span> 패싱 &amp; 전술</button>
+        <button class="cat-btn" data-cat="fitness"><span class="cat-icon">💪</span> 피지컬</button>
+        <button class="cat-btn" data-cat="youth"><span class="cat-icon">👦</span> 유소년</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COACH LISTINGS ===== -->
+  <section class="section listing-section">
+    <div class="container">
+      <div class="section-header">
+        <p id="listing-count">전체 <strong>6명</strong>의 코치</p>
+        <div class="sort-row">
+          <select class="search-select">
+            <option>추천순</option>
+            <option>평점 높은순</option>
+            <option>가격 낮은순</option>
+            <option>리뷰 많은순</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="coaches-grid" id="coaches-grid">
+
+        <div class="coach-card" data-cats="shooting dribble" onclick="location.href='coach.html'">
+          <div class="coach-card-img">
+            <div class="coach-avatar">김</div>
+            <span class="coach-badge pro">PRO</span>
+          </div>
+          <div class="coach-card-body">
+            <div class="coach-name">김민준</div>
+            <div class="coach-location">📍 서울 강남구</div>
+            <div class="coach-specialty">
+              <span class="tag">🎯 슈팅</span>
+              <span class="tag">⚡ 드리블</span>
+            </div>
+            <div class="coach-intro">"전 K리그 선수 출신. 슈팅 폼 교정부터 드리블 패턴까지 체계적으로 알려드립니다."</div>
+            <div class="coach-meta">
+              <div class="coach-rating"><span class="star">★</span> 4.97 <span class="count">(213)</span></div>
+              <span class="coach-exp">응답률 98% · 보통 1시간 내</span>
+            </div>
+            <div class="coach-price-row">
+              <div class="coach-price">₩65,000 <small>/ 60분</small></div>
+              <button class="btn-sm" onclick="event.stopPropagation(); location.href='coach.html'">프로필 보기</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="coach-card" data-cats="goalkeeper" onclick="location.href='coach.html'">
+          <div class="coach-card-img">
+            <div class="coach-avatar" style="background:linear-gradient(135deg,#FF6B35,#F7C59F);color:#1a0a00;">박</div>
+            <span class="coach-badge">VERIFIED</span>
+          </div>
+          <div class="coach-card-body">
+            <div class="coach-name">박성우</div>
+            <div class="coach-location">📍 서울 송파구</div>
+            <div class="coach-specialty">
+              <span class="tag yellow">🧤 골키퍼</span>
+              <span class="tag blue">🔁 전술</span>
+            </div>
+            <div class="coach-intro">"골키퍼 포지션 특화. 세이빙, 포지셔닝, 빌드업 참여까지 전문적으로 가르칩니다."</div>
+            <div class="coach-meta">
+              <div class="coach-rating"><span class="star">★</span> 4.93 <span class="count">(87)</span></div>
+              <span class="coach-exp">응답률 95% · 보통 2시간 내</span>
+            </div>
+            <div class="coach-price-row">
+              <div class="coach-price">₩80,000 <small>/ 60분</small></div>
+              <button class="btn-sm" onclick="event.stopPropagation(); location.href='coach.html'">프로필 보기</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="coach-card" data-cats="defense passing" onclick="location.href='coach.html'">
+          <div class="coach-card-img">
+            <div class="coach-avatar" style="background:linear-gradient(135deg,#7B2FBE,#C77DFF);color:#1a0030;">이</div>
+            <span class="coach-badge">VERIFIED</span>
+          </div>
+          <div class="coach-card-body">
+            <div class="coach-name">이지현</div>
+            <div class="coach-location">📍 경기 수원시</div>
+            <div class="coach-specialty">
+              <span class="tag blue">🛡️ 수비</span>
+              <span class="tag blue">🔁 패싱</span>
+            </div>
+            <div class="coach-intro">"수비 포지셔닝과 압박 전술, 1:1 수비 기술을 집중적으로 다룹니다."</div>
+            <div class="coach-meta">
+              <div class="coach-rating"><span class="star">★</span> 4.88 <span class="count">(145)</span></div>
+              <span class="coach-exp">응답률 92% · 보통 3시간 내</span>
+            </div>
+            <div class="coach-price-row">
+              <div class="coach-price">₩55,000 <small>/ 60분</small></div>
+              <button class="btn-sm" onclick="event.stopPropagation(); location.href='coach.html'">프로필 보기</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="coach-card" data-cats="dribble shooting fitness" onclick="location.href='coach.html'">
+          <div class="coach-card-img">
+            <div class="coach-avatar" style="background:linear-gradient(135deg,#FF4D8D,#FFB3C9);color:#2a0010;">최</div>
+            <span class="coach-badge pro">PRO</span>
+          </div>
+          <div class="coach-card-body">
+            <div class="coach-name">최태양</div>
+            <div class="coach-location">📍 서울 마포구</div>
+            <div class="coach-specialty">
+              <span class="tag">⚡ 드리블</span>
+              <span class="tag">💪 피지컬</span>
+            </div>
+            <div class="coach-intro">"개인기와 피지컬 강화를 동시에. 실전에서 쓸 수 있는 드리블 위주로 교육합니다."</div>
+            <div class="coach-meta">
+              <div class="coach-rating"><span class="star">★</span> 4.95 <span class="count">(302)</span></div>
+              <span class="coach-exp">응답률 99% · 보통 30분 내</span>
+            </div>
+            <div class="coach-price-row">
+              <div class="coach-price">₩70,000 <small>/ 60분</small></div>
+              <button class="btn-sm" onclick="event.stopPropagation(); location.href='coach.html'">프로필 보기</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="coach-card" data-cats="youth passing" onclick="location.href='coach.html'">
+          <div class="coach-card-img">
+            <div class="coach-avatar" style="background:linear-gradient(135deg,#0077B6,#90E0EF);color:#001a2e;">정</div>
+            <span class="coach-badge">VERIFIED</span>
+          </div>
+          <div class="coach-card-body">
+            <div class="coach-name">정하늘</div>
+            <div class="coach-location">📍 경기 성남시</div>
+            <div class="coach-specialty">
+              <span class="tag blue">👦 유소년</span>
+              <span class="tag blue">🔁 패싱</span>
+            </div>
+            <div class="coach-intro">"초·중학생 전문. 아이들 눈높이에 맞춘 재미있고 체계적인 기초 트레이닝."</div>
+            <div class="coach-meta">
+              <div class="coach-rating"><span class="star">★</span> 4.91 <span class="count">(76)</span></div>
+              <span class="coach-exp">응답률 94% · 보통 1시간 내</span>
+            </div>
+            <div class="coach-price-row">
+              <div class="coach-price">₩50,000 <small>/ 60분</small></div>
+              <button class="btn-sm" onclick="event.stopPropagation(); location.href='coach.html'">프로필 보기</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="coach-card" data-cats="fitness shooting" onclick="location.href='coach.html'">
+          <div class="coach-card-img">
+            <div class="coach-avatar" style="background:linear-gradient(135deg,#F9A825,#FFE082);color:#2a1a00;">강</div>
+            <span class="coach-badge">VERIFIED</span>
+          </div>
+          <div class="coach-card-body">
+            <div class="coach-name">강도현</div>
+            <div class="coach-location">📍 인천 부평구</div>
+            <div class="coach-specialty">
+              <span class="tag yellow">💪 피지컬</span>
+              <span class="tag">🎯 슈팅</span>
+            </div>
+            <div class="coach-intro">"스포츠과학 기반의 체력 훈련과 슈팅 파워 강화. 데이터 기반 피드백 제공."</div>
+            <div class="coach-meta">
+              <div class="coach-rating"><span class="star">★</span> 4.85 <span class="count">(54)</span></div>
+              <span class="coach-exp">응답률 90% · 보통 4시간 내</span>
+            </div>
+            <div class="coach-price-row">
+              <div class="coach-price">₩60,000 <small>/ 60분</small></div>
+              <button class="btn-sm" onclick="event.stopPropagation(); location.href='coach.html'">프로필 보기</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="load-more-row">
+        <button class="btn-ghost">더 보기</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo">⚽ First<span>Touch</span></div>
+          <p>축구 레슨 전문 코치-수강생 매칭 플랫폼. 원하는 스킬의 전문 코치를 직접 찾고, 구장까지 한 번에 예약하세요.</p>
+        </div>
+        <div class="footer-col">
+          <h4>서비스</h4>
+          <ul>
+            <li><a href="index.html">레슨 찾기</a></li>
+            <li><a href="community.html">커뮤니티</a></li>
+            <li><a href="register-coach.html">코치 등록</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>카테고리</h4>
+          <ul>
+            <li><a href="#">슈팅 레슨</a></li>
+            <li><a href="#">드리블 레슨</a></li>
+            <li><a href="#">수비 레슨</a></li>
+            <li><a href="#">골키퍼 레슨</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>회사</h4>
+          <ul>
+            <li><a href="#">서비스 소개</a></li>
+            <li><a href="#">이용약관</a></li>
+            <li><a href="#">개인정보처리방침</a></li>
+            <li><a href="#">고객센터</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 First Touch Inc. All rights reserved.</p>
+        <p>사업자등록번호: 123-45-67890 | 서울특별시 강남구</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

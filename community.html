@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>커뮤니티 — First Touch</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-left">
+        <a href="index.html" class="nav-logo">
+          <span class="ball">⚽</span> First<span>Touch</span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="index.html">레슨 찾기</a></li>
+          <li><a href="community.html" class="nav-active">커뮤니티</a></li>
+        </ul>
+      </div>
+      <div class="nav-actions">
+        <button class="btn-outline">로그인</button>
+        <button class="btn-outline">회원가입</button>
+        <a href="register-coach.html" class="btn-coach-reg">코치 등록</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== PAGE HEADER ===== -->
+  <div class="page-header">
+    <div class="container">
+      <h1>커뮤니티</h1>
+      <p>축구를 사랑하는 사람들의 이야기 · 훈련 팁 · 구장 후기</p>
+    </div>
+  </div>
+
+  <!-- ===== COMMUNITY LAYOUT ===== -->
+  <section class="section community-section">
+    <div class="container">
+      <div class="community-layout">
+
+        <!-- LEFT: Posts -->
+        <div class="community-main">
+
+          <!-- Category tabs -->
+          <div class="comm-tabs">
+            <button class="comm-tab active" data-board="all">전체</button>
+            <button class="comm-tab" data-board="free">자유게시판</button>
+            <button class="comm-tab" data-board="tip">훈련 팁</button>
+            <button class="comm-tab" data-board="venue">구장 후기</button>
+            <button class="comm-tab" data-board="qna">Q&amp;A</button>
+            <button class="comm-tab" data-board="review">코치 후기</button>
+          </div>
+
+          <!-- Write button -->
+          <div class="comm-header-row">
+            <p class="comm-count" id="comm-count">전체 <strong>12개</strong>의 게시글</p>
+            <button class="btn-primary" style="font-size:0.8rem; padding: 8px 16px;">✏️ 글쓰기</button>
+          </div>
+
+          <!-- Post List -->
+          <div class="post-list" id="post-list">
+
+            <div class="post-item" data-board="tip">
+              <div class="post-board-badge tip-badge">훈련 팁</div>
+              <div class="post-body">
+                <a href="#" class="post-title">슈팅 파워 30% 높인 훈련 루틴 공유합니다</a>
+                <p class="post-preview">인스텝 킥 폼 교정 후에 실제로 파워가 많이 올라갔는데, 핵심은 발목 고정이 아니라 골반 회전이었어요...</p>
+                <div class="post-meta">
+                  <span class="post-author">⚽ 이준혁</span>
+                  <span class="post-date">2026.03.20</span>
+                  <span class="post-stat">👍 34</span>
+                  <span class="post-stat">💬 12</span>
+                  <span class="post-stat">👁️ 287</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="post-item" data-board="venue">
+              <div class="post-board-badge venue-badge">구장 후기</div>
+              <div class="post-body">
+                <a href="#" class="post-title">강남 풋살파크 A구장 후기 — 인조잔디 상태 최고</a>
+                <p class="post-preview">저번 주에 레슨 예약하면서 처음 가봤는데 잔디 상태가 생각보다 훨씬 좋았고 주차도 편했어요. 샤워실이 없는 게 아쉽지만...</p>
+                <div class="post-meta">
+                  <span class="post-author">🧤 박도현</span>
+                  <span class="post-date">2026.03.19</span>
+                  <span class="post-stat">👍 21</span>
+                  <span class="post-stat">💬 8</span>
+                  <span class="post-stat">👁️ 193</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="post-item" data-board="qna">
+              <div class="post-board-badge qna-badge">Q&amp;A</div>
+              <div class="post-body">
+                <a href="#" class="post-title">성인 입문자인데 어떤 스킬부터 배우는 게 좋을까요?</a>
+                <p class="post-preview">30대 초반이고 풋살은 가끔 하는데 제대로 배워보고 싶어서요. 슈팅이 먼저인지 드리블이 먼저인지...</p>
+                <div class="post-meta">
+                  <span class="post-author">🔰 김새벽</span>
+                  <span class="post-date">2026.03.18</span>
+                  <span class="post-stat">👍 15</span>
+                  <span class="post-stat">💬 19</span>
+                  <span class="post-stat">👁️ 412</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="post-item" data-board="review">
+              <div class="post-board-badge review-badge">코치 후기</div>
+              <div class="post-body">
+                <a href="#" class="post-title">최태양 코치님 드리블 레슨 8회 후기 (강추)</a>
+                <p class="post-preview">원래 드리블할 때 스피드만 믿고 돌진했는데 코치님이 방향 전환 타이밍이랑 무게중심 이동을 집중적으로 잡아주셨어요...</p>
+                <div class="post-meta">
+                  <span class="post-author">⚡ 강민재</span>
+                  <span class="post-date">2026.03.17</span>
+                  <span class="post-stat">👍 47</span>
+                  <span class="post-stat">💬 6</span>
+                  <span class="post-stat">👁️ 531</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="post-item" data-board="free">
+              <div class="post-board-badge free-badge">자유게시판</div>
+              <div class="post-body">
+                <a href="#" class="post-title">주말 서울 동호회 같이 뛸 분 구해요 (강남/서초)</a>
+                <p class="post-preview">매주 토요일 오전 7시 강남 풋살파크에서 뛰고 있습니다. 포지션 무관, 실력 무관 환영해요...</p>
+                <div class="post-meta">
+                  <span class="post-author">⚽ 정하준</span>
+                  <span class="post-date">2026.03.16</span>
+                  <span class="post-stat">👍 9</span>
+                  <span class="post-stat">💬 23</span>
+                  <span class="post-stat">👁️ 348</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="post-item" data-board="tip">
+              <div class="post-board-badge tip-badge">훈련 팁</div>
+              <div class="post-body">
+                <a href="#" class="post-title">골키퍼 반응속도 훈련법 — 코치님께 배운 방법</a>
+                <p class="post-preview">박성우 코치님한테 배운 내용인데, 단순 반복보다 '예측 불가 자극'을 넣는 게 핵심이라고 하셨어요...</p>
+                <div class="post-meta">
+                  <span class="post-author">🧤 오세준</span>
+                  <span class="post-date">2026.03.15</span>
+                  <span class="post-stat">👍 28</span>
+                  <span class="post-stat">💬 5</span>
+                  <span class="post-stat">👁️ 224</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="post-item" data-board="qna">
+              <div class="post-board-badge qna-badge">Q&amp;A</div>
+              <div class="post-body">
+                <a href="#" class="post-title">레슨 취소하면 환불이 얼마나 걸리나요?</a>
+                <p class="post-preview">내일 레슨인데 갑자기 일정이 생겼어요. 48시간 이내 취소는 환불이 안 된다고 나와있는데...</p>
+                <div class="post-meta">
+                  <span class="post-author">🔰 최수진</span>
+                  <span class="post-date">2026.03.14</span>
+                  <span class="post-stat">👍 3</span>
+                  <span class="post-stat">💬 4</span>
+                  <span class="post-stat">👁️ 156</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="post-item" data-board="venue">
+              <div class="post-board-badge venue-badge">구장 후기</div>
+              <div class="post-body">
+                <a href="#" class="post-title">잠실 드림 풋볼파크 천연잔디 상태 — 비 온 다음날 주의</a>
+                <p class="post-preview">잔디 자체는 좋은데 비 온 다음날 배수가 좀 느려서 질척거렸어요. 날씨 확인하고 예약하세요...</p>
+                <div class="post-meta">
+                  <span class="post-author">🏟️ 홍길동</span>
+                  <span class="post-date">2026.03.13</span>
+                  <span class="post-stat">👍 18</span>
+                  <span class="post-stat">💬 7</span>
+                  <span class="post-stat">👁️ 201</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="post-item" data-board="free">
+              <div class="post-board-badge free-badge">자유게시판</div>
+              <div class="post-body">
+                <a href="#" class="post-title">처음 레슨 받아봤는데 생각보다 많이 달라요</a>
+                <p class="post-preview">혼자 유튜브 보면서 연습하다가 처음으로 코치 레슨 받았는데, 틀린 습관을 잡아주는 게 이렇게 중요한지 몰랐어요...</p>
+                <div class="post-meta">
+                  <span class="post-author">🔰 류지훈</span>
+                  <span class="post-date">2026.03.12</span>
+                  <span class="post-stat">👍 42</span>
+                  <span class="post-stat">💬 14</span>
+                  <span class="post-stat">👁️ 487</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="post-item" data-board="review">
+              <div class="post-board-badge review-badge">코치 후기</div>
+              <div class="post-body">
+                <a href="#" class="post-title">이지현 코치님 수비 레슨 — 포지셔닝 개념이 완전히 잡혔어요</a>
+                <p class="post-preview">공격수한테 맨날 뚫렸는데 3회 수업 후에 확실히 달라졌어요. 압박 타이밍이랑 위치 선정을 집중적으로...</p>
+                <div class="post-meta">
+                  <span class="post-author">🛡️ 안태민</span>
+                  <span class="post-date">2026.03.11</span>
+                  <span class="post-stat">👍 33</span>
+                  <span class="post-stat">💬 9</span>
+                  <span class="post-stat">👁️ 302</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="post-item" data-board="tip">
+              <div class="post-board-badge tip-badge">훈련 팁</div>
+              <div class="post-body">
+                <a href="#" class="post-title">혼자 할 수 있는 드리블 훈련 — 콘 없어도 됨</a>
+                <p class="post-preview">집 앞 공터에서 콘 없이 드리블 패턴 훈련하는 방법이에요. 선 활용 + 마커 대신 물통 사용...</p>
+                <div class="post-meta">
+                  <span class="post-author">⚡ 나혼자</span>
+                  <span class="post-date">2026.03.10</span>
+                  <span class="post-stat">👍 56</span>
+                  <span class="post-stat">💬 11</span>
+                  <span class="post-stat">👁️ 623</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="post-item" data-board="qna">
+              <div class="post-board-badge qna-badge">Q&amp;A</div>
+              <div class="post-body">
+                <a href="#" class="post-title">코치 등록할 때 자격증이 꼭 있어야 하나요?</a>
+                <p class="post-preview">선수 경력은 있는데 공식 지도자 자격증은 없어요. 그래도 등록이 가능한지 궁금합니다...</p>
+                <div class="post-meta">
+                  <span class="post-author">📋 예비코치</span>
+                  <span class="post-date">2026.03.09</span>
+                  <span class="post-stat">👍 7</span>
+                  <span class="post-stat">💬 6</span>
+                  <span class="post-stat">👁️ 298</span>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /post-list -->
+
+          <div class="load-more-row">
+            <button class="btn-ghost">더 보기</button>
+          </div>
+        </div>
+
+        <!-- RIGHT: Sidebar -->
+        <aside class="community-sidebar">
+
+          <div class="sidebar-card">
+            <h4 class="sidebar-title">🔥 인기 글</h4>
+            <ul class="sidebar-list">
+              <li><a href="#">슈팅 파워 30% 높인 훈련 루틴 공유</a><span>287 조회</span></li>
+              <li><a href="#">혼자 할 수 있는 드리블 훈련</a><span>623 조회</span></li>
+              <li><a href="#">처음 레슨 받아봤는데 생각보다 많이 달라요</a><span>487 조회</span></li>
+              <li><a href="#">최태양 코치님 드리블 레슨 8회 후기</a><span>531 조회</span></li>
+              <li><a href="#">성인 입문자인데 어떤 스킬부터?</a><span>412 조회</span></li>
+            </ul>
+          </div>
+
+          <div class="sidebar-card">
+            <h4 class="sidebar-title">📌 공지사항</h4>
+            <ul class="sidebar-list">
+              <li><a href="#">[공지] First Touch 커뮤니티 이용 가이드</a></li>
+              <li><a href="#">[공지] 구장 후기 작성 가이드라인</a></li>
+              <li><a href="#">[이벤트] 3월 레슨 후기 작성 시 포인트 2배</a></li>
+            </ul>
+          </div>
+
+          <div class="sidebar-card sidebar-cta">
+            <div class="sidebar-cta-icon">📋</div>
+            <h4>코치로 활동하고 싶으신가요?</h4>
+            <p>레슨 가격과 일정을 직접 정하고 수강생을 만나보세요.</p>
+            <a href="register-coach.html" class="btn-primary" style="display:block; text-align:center; padding:10px; margin-top:12px; border-radius:8px;">코치 등록하기</a>
+          </div>
+
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo">⚽ First<span>Touch</span></div>
+          <p>축구 레슨 전문 코치-수강생 매칭 플랫폼.</p>
+        </div>
+        <div class="footer-col">
+          <h4>서비스</h4>
+          <ul>
+            <li><a href="index.html">레슨 찾기</a></li>
+            <li><a href="community.html">커뮤니티</a></li>
+            <li><a href="register-coach.html">코치 등록</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>카테고리</h4>
+          <ul>
+            <li><a href="#">슈팅 레슨</a></li>
+            <li><a href="#">드리블 레슨</a></li>
+            <li><a href="#">수비 레슨</a></li>
+            <li><a href="#">골키퍼 레슨</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>회사</h4>
+          <ul>
+            <li><a href="#">이용약관</a></li>
+            <li><a href="#">개인정보처리방침</a></li>
+            <li><a href="#">고객센터</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 First Touch Inc. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

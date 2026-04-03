@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>로그인 / 회원가입 — First Touch</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-left">
+        <a href="index.html" class="nav-logo">
+          <span class="ball">⚽</span> First<span>Touch</span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="index.html">레슨 찾기</a></li>
+          <li><a href="community.html">커뮤니티</a></li>
+        </ul>
+      </div>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-outline">로그인</a>
+        <a href="login.html#signup" class="btn-outline">회원가입</a>
+        <a href="register-coach.html" class="btn-coach-reg">코치 등록</a>
+        <a href="register-venue.html" class="btn-venue-reg">구장 등록</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== AUTH SECTION ===== -->
+  <section class="auth-section">
+    <div class="auth-card">
+      <div class="auth-header">
+        <a href="index.html" class="nav-logo" style="justify-content:center;font-size:1.3rem;margin-bottom:12px;">
+          <span class="ball">⚽</span> First<span>Touch</span>
+        </a>
+      </div>
+
+      <!-- Tab switcher -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">로그인</button>
+        <button class="auth-tab" data-tab="signup">회원가입</button>
+      </div>
+
+      <!-- Error message -->
+      <div class="auth-error" id="auth-error" style="display:none;"></div>
+
+      <!-- Login form -->
+      <div class="auth-panel active" id="panel-login">
+        <form id="login-form">
+          <div class="form-group">
+            <label class="form-label">이메일</label>
+            <input type="email" class="form-input" id="login-email" placeholder="example@email.com" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              비밀번호
+              <a href="#" class="form-link">비밀번호 찾기</a>
+            </label>
+            <input type="password" class="form-input" id="login-password" placeholder="비밀번호를 입력해주세요" required />
+          </div>
+          <button type="submit" class="btn-book" style="margin-top:4px;" id="login-btn">로그인</button>
+        </form>
+      </div>
+
+      <!-- Signup form -->
+      <div class="auth-panel" id="panel-signup">
+        <form id="signup-form">
+          <div class="form-group">
+            <label class="form-label">이름</label>
+            <input type="text" class="form-input" id="signup-name" placeholder="실명을 입력해주세요" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">이메일</label>
+            <input type="email" class="form-input" id="signup-email" placeholder="example@email.com" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">연락처</label>
+            <input type="tel" class="form-input" id="signup-phone" placeholder="010-0000-0000" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">비밀번호</label>
+            <input type="password" class="form-input" id="signup-password" placeholder="8자 이상, 영문+숫자 조합" required minlength="8" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">비밀번호 확인</label>
+            <input type="password" class="form-input" id="signup-password-confirm" placeholder="비밀번호를 다시 입력해주세요" required minlength="8" />
+          </div>
+          <div class="form-agree">
+            <label class="skill-check">
+              <input type="checkbox" id="signup-agree" required />
+              <span><a href="#" style="color:var(--green);">이용약관</a> 및 <a href="#" style="color:var(--green);">개인정보처리방침</a>에 동의합니다</span>
+            </label>
+          </div>
+          <button type="submit" class="btn-book" style="margin-top:4px;" id="signup-btn">회원가입</button>
+        </form>
+      </div>
+
+      <div class="auth-divider">
+        <span>또는</span>
+      </div>
+
+      <div class="social-login">
+        <button class="btn-social kakao" onclick="alert('카카오 로그인은 준비 중입니다.')">
+          <span class="social-icon">💬</span> 카카오로 계속하기
+        </button>
+        <button class="btn-social google" onclick="alert('Google 로그인은 준비 중입니다.')">
+          <span class="social-icon">G</span> Google로 계속하기
+        </button>
+        <button class="btn-social naver" onclick="alert('네이버 로그인은 준비 중입니다.')">
+          <span class="social-icon">N</span> 네이버로 계속하기
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <script src="api.js"></script>
+  <script src="app.js"></script>
+  <script>
+    /* ----- Tab switching ----- */
+    const authTabs = document.querySelectorAll('.auth-tab');
+    const authPanels = document.querySelectorAll('.auth-panel');
+    const authError = document.getElementById('auth-error');
+
+    function switchTab(tab) {
+      authTabs.forEach(t => t.classList.remove('active'));
+      authPanels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+      authError.style.display = 'none';
+    }
+
+    authTabs.forEach(tab => {
+      tab.addEventListener('click', () => switchTab(tab));
+    });
+
+    if (window.location.hash === '#signup') {
+      const signupTab = document.querySelector('.auth-tab[data-tab="signup"]');
+      if (signupTab) switchTab(signupTab);
+    }
+
+    /* ----- Show error ----- */
+    function showError(msg) {
+      authError.textContent = msg;
+      authError.style.display = 'block';
+    }
+
+    /* ----- Login ----- */
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      authError.style.display = 'none';
+      const btn = document.getElementById('login-btn');
+      btn.disabled = true;
+      btn.textContent = '로그인 중...';
+
+      try {
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        await login(email, password);
+        window.location.href = '/index.html';
+      } catch (err) {
+        showError(err.message);
+        btn.disabled = false;
+        btn.textContent = '로그인';
+      }
+    });
+
+    /* ----- Signup ----- */
+    document.getElementById('signup-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      authError.style.display = 'none';
+
+      const password = document.getElementById('signup-password').value;
+      const confirm = document.getElementById('signup-password-confirm').value;
+
+      if (password !== confirm) {
+        showError('비밀번호가 일치하지 않습니다.');
+        return;
+      }
+
+      const btn = document.getElementById('signup-btn');
+      btn.disabled = true;
+      btn.textContent = '가입 중...';
+
+      try {
+        const name = document.getElementById('signup-name').value;
+        const email = document.getElementById('signup-email').value;
+        const phone = document.getElementById('signup-phone').value;
+        await signup(name, email, phone, password);
+        window.location.href = '/index.html';
+      } catch (err) {
+        showError(err.message);
+        btn.disabled = false;
+        btn.textContent = '회원가입';
+      }
+    });
+
+    /* ----- If already logged in, redirect ----- */
+    if (getToken()) {
+      window.location.href = '/index.html';
+    }
+  </script>
+</body>
+</html>

@@ -21,9 +21,10 @@
         </ul>
       </div>
       <div class="nav-actions">
-        <button class="btn-outline">로그인</button>
-        <button class="btn-outline">회원가입</button>
+        <a href="login.html" class="btn-outline">로그인</a>
+        <a href="login.html#signup" class="btn-outline">회원가입</a>
         <a href="register-coach.html" class="btn-coach-reg">코치 등록</a>
+        <a href="register-venue.html" class="btn-venue-reg">구장 등록</a>
       </div>
     </div>
   </nav>
@@ -101,7 +102,10 @@
               <span class="coach-exp">응답률 98% · 보통 1시간 내</span>
             </div>
             <div class="coach-price-row">
-              <div class="coach-price">₩65,000 <small>/ 60분</small></div>
+              <div class="coach-price">
+                <span class="price-total">₩65,000</span> <small>/ 60분</small>
+                <span class="price-breakdown">레슨 ₩50,000 + 구장·기구 ₩15,000</span>
+              </div>
               <button class="btn-sm" onclick="event.stopPropagation(); location.href='coach.html'">프로필 보기</button>
             </div>
           </div>
@@ -125,7 +129,10 @@
               <span class="coach-exp">응답률 95% · 보통 2시간 내</span>
             </div>
             <div class="coach-price-row">
-              <div class="coach-price">₩80,000 <small>/ 60분</small></div>
+              <div class="coach-price">
+                <span class="price-total">₩80,000</span> <small>/ 60분</small>
+                <span class="price-breakdown">레슨 ₩60,000 + 구장·기구 ₩20,000</span>
+              </div>
               <button class="btn-sm" onclick="event.stopPropagation(); location.href='coach.html'">프로필 보기</button>
             </div>
           </div>
@@ -149,7 +156,10 @@
               <span class="coach-exp">응답률 92% · 보통 3시간 내</span>
             </div>
             <div class="coach-price-row">
-              <div class="coach-price">₩55,000 <small>/ 60분</small></div>
+              <div class="coach-price">
+                <span class="price-total">₩55,000</span> <small>/ 60분</small>
+                <span class="price-breakdown">레슨 ₩40,000 + 구장·기구 ₩15,000</span>
+              </div>
               <button class="btn-sm" onclick="event.stopPropagation(); location.href='coach.html'">프로필 보기</button>
             </div>
           </div>
@@ -173,7 +183,10 @@
               <span class="coach-exp">응답률 99% · 보통 30분 내</span>
             </div>
             <div class="coach-price-row">
-              <div class="coach-price">₩70,000 <small>/ 60분</small></div>
+              <div class="coach-price">
+                <span class="price-total">₩70,000</span> <small>/ 60분</small>
+                <span class="price-breakdown">레슨 ₩55,000 + 구장·기구 ₩15,000</span>
+              </div>
               <button class="btn-sm" onclick="event.stopPropagation(); location.href='coach.html'">프로필 보기</button>
             </div>
           </div>
@@ -197,7 +210,10 @@
               <span class="coach-exp">응답률 94% · 보통 1시간 내</span>
             </div>
             <div class="coach-price-row">
-              <div class="coach-price">₩50,000 <small>/ 60분</small></div>
+              <div class="coach-price">
+                <span class="price-total">₩50,000</span> <small>/ 60분</small>
+                <span class="price-breakdown">레슨 ₩35,000 + 구장·기구 ₩15,000</span>
+              </div>
               <button class="btn-sm" onclick="event.stopPropagation(); location.href='coach.html'">프로필 보기</button>
             </div>
           </div>
@@ -221,7 +237,10 @@
               <span class="coach-exp">응답률 90% · 보통 4시간 내</span>
             </div>
             <div class="coach-price-row">
-              <div class="coach-price">₩60,000 <small>/ 60분</small></div>
+              <div class="coach-price">
+                <span class="price-total">₩60,000</span> <small>/ 60분</small>
+                <span class="price-breakdown">레슨 ₩45,000 + 구장·기구 ₩15,000</span>
+              </div>
               <button class="btn-sm" onclick="event.stopPropagation(); location.href='coach.html'">프로필 보기</button>
             </div>
           </div>
@@ -249,6 +268,7 @@
             <li><a href="index.html">레슨 찾기</a></li>
             <li><a href="community.html">커뮤니티</a></li>
             <li><a href="register-coach.html">코치 등록</a></li>
+            <li><a href="register-venue.html">구장 등록</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -277,6 +297,7 @@
     </div>
   </footer>
 
+  <script src="api.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

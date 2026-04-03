@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>관리자 대시보드 — First Touch</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ===== Admin-specific styles ===== */
+    .admin-layout { padding: 80px 0 40px; min-height: 100vh; background: var(--bg); }
+    .admin-header { margin-bottom: 28px; }
+    .admin-header h1 { font-size: 1.4rem; margin-bottom: 4px; }
+    .admin-header p { font-size: 0.82rem; color: var(--text-muted); }
+
+    /* Stats grid */
+    .admin-stats {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px; margin-bottom: 28px;
+    }
+    .admin-stat-card {
+      background: white; border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 20px; box-shadow: var(--shadow-sm);
+    }
+    .admin-stat-label { font-size: 0.72rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+    .admin-stat-value { font-size: 1.8rem; font-weight: 800; color: var(--text-primary); }
+    .admin-stat-sub { font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; }
+    .admin-stat-card.green .admin-stat-value { color: var(--green); }
+    .admin-stat-card.yellow .admin-stat-value { color: var(--yellow); }
+    .admin-stat-card.blue .admin-stat-value { color: #2563EB; }
+
+    /* Tabs */
+    .admin-tabs {
+      display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 20px;
+      background: white; border-radius: var(--radius) var(--radius) 0 0;
+      border: 1px solid var(--border); border-bottom: none; overflow: hidden;
+    }
+    .admin-tab {
+      flex: 1; padding: 12px; text-align: center; font-size: 0.85rem; font-weight: 600;
+      color: var(--text-muted); background: var(--bg); cursor: pointer;
+      transition: all var(--transition); font-family: inherit; border: none;
+      border-right: 1px solid var(--border);
+    }
+    .admin-tab:last-child { border-right: none; }
+    .admin-tab.active { background: white; color: var(--green); }
+    .admin-tab:hover:not(.active) { color: var(--text-primary); }
+    .admin-tab .tab-count {
+      display: inline-block; padding: 1px 7px; border-radius: 100px;
+      background: var(--bg); font-size: 0.7rem; font-weight: 700; margin-left: 4px;
+    }
+    .admin-tab.active .tab-count { background: var(--green-light); color: var(--green); }
+
+    /* Panel */
+    .admin-panel { display: none; }
+    .admin-panel.active { display: block; }
+
+    /* Table */
+    .admin-table-wrap {
+      background: white; border: 1px solid var(--border); border-radius: var(--radius);
+      overflow: hidden; box-shadow: var(--shadow-sm);
+    }
+    .admin-table { width: 100%; border-collapse: collapse; }
+    .admin-table th {
+      text-align: left; padding: 10px 14px; font-size: 0.72rem; font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .admin-table td {
+      padding: 12px 14px; font-size: 0.82rem; color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-light); vertical-align: middle;
+    }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-table tr:hover td { background: #FAFAFA; }
+
+    /* Status badges */
+    .status-badge {
+      display: inline-block; padding: 2px 10px; border-radius: 100px;
+      font-size: 0.68rem; font-weight: 700;
+    }
+    .status-pending { background: #FEF3C7; color: #B45309; }
+    .status-approved { background: var(--green-light); color: var(--green); }
+    .status-rejected { background: #FEE2E2; color: #DC2626; }
+    .status-coach_accepted { background: #DBEAFE; color: #2563EB; }
+    .status-confirmed { background: var(--green-light); color: var(--green); }
+
+    /* Action buttons */
+    .admin-actions { display: flex; gap: 6px; }
+    .btn-approve, .btn-reject, .btn-delete {
+      padding: 4px 10px; border-radius: var(--radius-sm); font-size: 0.72rem;
+      font-weight: 600; cursor: pointer; transition: all var(--transition);
+      font-family: inherit; border: 1px solid;
+    }
+    .btn-approve { background: var(--green-light); color: var(--green); border-color: var(--green-mid); }
+    .btn-approve:hover { background: var(--green); color: white; }
+    .btn-reject { background: #FEF2F2; color: #DC2626; border-color: #FECACA; }
+    .btn-reject:hover { background: #DC2626; color: white; }
+    .btn-delete { background: white; color: var(--text-muted); border-color: var(--border); }
+    .btn-delete:hover { background: #FEF2F2; color: #DC2626; border-color: #FECACA; }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center; padding: 48px 20px; color: var(--text-muted); font-size: 0.85rem;
+    }
+    .empty-state-icon { font-size: 2rem; margin-bottom: 8px; }
+
+    /* Skill tags in table */
+    .skill-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+    .skill-tag {
+      padding: 1px 7px; border-radius: 100px; font-size: 0.68rem; font-weight: 600;
+      background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid);
+    }
+
+    /* Login guard */
+    .admin-guard {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: var(--bg); padding: 24px;
+    }
+    .admin-guard-card {
+      background: white; border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 40px; text-align: center; box-shadow: var(--shadow); max-width: 400px;
+    }
+    .admin-guard-card h2 { margin-bottom: 8px; }
+    .admin-guard-card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="nav-left">
+        <a href="index.html" class="nav-logo">
+          <span class="ball">⚽</span> First<span>Touch</span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="index.html">레슨 찾기</a></li>
+          <li><a href="community.html">커뮤니티</a></li>
+          <li><a href="admin.html" class="nav-active" style="color:var(--yellow);">관리자</a></li>
+        </ul>
+      </div>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-outline">로그인</a>
+        <a href="login.html#signup" class="btn-outline">회원가입</a>
+        <a href="register-coach.html" class="btn-coach-reg">코치 등록</a>
+        <a href="register-venue.html" class="btn-venue-reg">구장 등록</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== ADMIN CONTENT (shown after auth check) ===== -->
+  <div id="admin-content" style="display:none;">
+    <div class="admin-layout">
+      <div class="container">
+
+        <div class="admin-header">
+          <h1>관리자 대시보드</h1>
+          <p id="admin-welcome">First Touch 관리 페이지입니다.</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="admin-stats" id="admin-stats">
+          <div class="admin-stat-card">
+            <div class="admin-stat-label">전체 회원</div>
+            <div class="admin-stat-value" id="stat-users">-</div>
+          </div>
+          <div class="admin-stat-card yellow">
+            <div class="admin-stat-label">코치 신청</div>
+            <div class="admin-stat-value" id="stat-coaches">-</div>
+            <div class="admin-stat-sub" id="stat-coaches-sub"></div>
+          </div>
+          <div class="admin-stat-card blue">
+            <div class="admin-stat-label">구장 신청</div>
+            <div class="admin-stat-value" id="stat-venues">-</div>
+            <div class="admin-stat-sub" id="stat-venues-sub"></div>
+          </div>
+          <div class="admin-stat-card green">
+            <div class="admin-stat-label">레슨 예약</div>
+            <div class="admin-stat-value" id="stat-bookings">-</div>
+            <div class="admin-stat-sub" id="stat-bookings-sub"></div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="admin-tabs">
+          <button class="admin-tab active" data-panel="users">회원 목록 <span class="tab-count" id="tab-count-users">0</span></button>
+          <button class="admin-tab" data-panel="coaches">코치 신청 <span class="tab-count" id="tab-count-coaches">0</span></button>
+          <button class="admin-tab" data-panel="venues">구장 신청 <span class="tab-count" id="tab-count-venues">0</span></button>
+          <button class="admin-tab" data-panel="bookings">레슨 예약 <span class="tab-count" id="tab-count-bookings">0</span></button>
+        </div>
+
+        <!-- Users Panel -->
+        <div class="admin-panel active" id="panel-users">
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>이름</th>
+                  <th>이메일</th>
+                  <th>연락처</th>
+                  <th>가입일</th>
+                  <th>권한</th>
+                  <th>관리</th>
+                </tr>
+              </thead>
+              <tbody id="users-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Coaches Panel -->
+        <div class="admin-panel" id="panel-coaches">
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>이름</th>
+                  <th>이메일</th>
+                  <th>스킬</th>
+                  <th>지역</th>
+                  <th>소개</th>
+                  <th>상태</th>
+                  <th>신청일</th>
+                  <th>관리</th>
+                </tr>
+              </thead>
+              <tbody id="coaches-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Venues Panel -->
+        <div class="admin-panel" id="panel-venues">
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>구장명</th>
+                  <th>등록자</th>
+                  <th>주소</th>
+                  <th>타입</th>
+                  <th>기구</th>
+                  <th>시간당</th>
+                  <th>상태</th>
+                  <th>신청일</th>
+                  <th>관리</th>
+                </tr>
+              </thead>
+              <tbody id="venues-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Bookings Panel -->
+        <div class="admin-panel" id="panel-bookings">
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>수강생</th>
+                  <th>코치</th>
+                  <th>레슨</th>
+                  <th>일시</th>
+                  <th>금액</th>
+                  <th>구장</th>
+                  <th>상태</th>
+                  <th>관리</th>
+                </tr>
+              </thead>
+              <tbody id="bookings-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ACCESS DENIED ===== -->
+  <div id="admin-guard" style="display:none;">
+    <div class="admin-guard">
+      <div class="admin-guard-card">
+        <div style="font-size:2.5rem;margin-bottom:12px;">🔒</div>
+        <h2>접근 권한 없음</h2>
+        <p id="guard-message">관리자 계정으로 로그인해주세요.</p>
+        <a href="login.html" class="btn-book" style="display:inline-flex;width:auto;padding:10px 24px;">로그인 하기</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="api.js"></script>
+  <script>
+    const token = getToken();
+    const user = getUser();
+
+    /* ----- Auth guard ----- */
+    async function initAdmin() {
+      if (!token) {
+        document.getElementById('admin-guard').style.display = 'block';
+        return;
+      }
+
+      try {
+        // Test admin access by fetching stats
+        const stats = await apiFetch('/admin/stats');
+        document.getElementById('admin-content').style.display = 'block';
+        if (user) {
+          document.getElementById('admin-welcome').textContent = `${user.name}님, 환영합니다.`;
+        }
+        renderStats(stats);
+        loadUsers();
+        loadCoaches();
+        loadVenues();
+        loadBookings();
+      } catch (err) {
+        document.getElementById('admin-guard').style.display = 'block';
+        document.getElementById('guard-message').textContent = err.message;
+      }
+    }
+
+    /* ----- Stats ----- */
+    function renderStats(s) {
+      document.getElementById('stat-users').textContent = s.users.total;
+      document.getElementById('stat-coaches').textContent = s.coaches.total;
+      document.getElementById('stat-coaches-sub').textContent = `대기 ${s.coaches.pending} · 승인 ${s.coaches.approved} · 거절 ${s.coaches.rejected}`;
+      document.getElementById('stat-venues').textContent = s.venues.total;
+      document.getElementById('stat-venues-sub').textContent = `대기 ${s.venues.pending} · 승인 ${s.venues.approved} · 거절 ${s.venues.rejected}`;
+      if (s.bookings) {
+        document.getElementById('stat-bookings').textContent = s.bookings.total;
+        document.getElementById('stat-bookings-sub').textContent = `대기 ${s.bookings.pending} · 수락 ${s.bookings.coach_accepted} · 확정 ${s.bookings.confirmed}`;
+      }
+    }
+
+    /* ----- Users ----- */
+    async function loadUsers() {
+      const { users } = await apiFetch('/admin/users');
+      document.getElementById('tab-count-users').textContent = users.length;
+      const tbody = document.getElementById('users-tbody');
+      if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="empty-state-icon">👤</div>등록된 회원이 없습니다.</div></td></tr>';
+        return;
+      }
+      tbody.innerHTML = users.map(u => `
+        <tr>
+          <td>${u.id}</td>
+          <td><strong>${u.name}</strong></td>
+          <td>${u.email}</td>
+          <td>${u.phone}</td>
+          <td>${formatDate(u.created_at)}</td>
+          <td>${u.is_admin ? '<span class="status-badge status-approved">관리자</span>' : '일반'}</td>
+          <td>
+            <div class="admin-actions">
+              ${u.is_admin ? '' : `<button class="btn-delete" onclick="deleteUser(${u.id}, '${u.name}')">삭제</button>`}
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function deleteUser(id, name) {
+      if (!confirm(`정말 "${name}" 회원을 삭제하시겠습니까?`)) return;
+      try {
+        await apiFetch(`/admin/users/${id}`, { method: 'DELETE' });
+        await refreshAll();
+      } catch (err) { alert(err.message); }
+    }
+
+    /* ----- Coaches ----- */
+    async function loadCoaches() {
+      const { coaches } = await apiFetch('/admin/coaches');
+      document.getElementById('tab-count-coaches').textContent = coaches.length;
+      const tbody = document.getElementById('coaches-tbody');
+      if (coaches.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><div class="empty-state-icon">🏅</div>코치 신청이 없습니다.</div></td></tr>';
+        return;
+      }
+      tbody.innerHTML = coaches.map(c => `
+        <tr>
+          <td>${c.id}</td>
+          <td><strong>${c.name}</strong></td>
+          <td>${c.email}</td>
+          <td><div class="skill-tags">${c.skills.split(',').map(s => `<span class="skill-tag">${s}</span>`).join('')}</div></td>
+          <td>${c.region}</td>
+          <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.bio || '-'}</td>
+          <td><span class="status-badge status-${c.status}">${statusLabel(c.status)}</span></td>
+          <td>${formatDate(c.created_at)}</td>
+          <td>
+            <div class="admin-actions">
+              ${c.status === 'pending' ? `
+                <button class="btn-approve" onclick="updateCoach(${c.id}, 'approved')">승인</button>
+                <button class="btn-reject" onclick="updateCoach(${c.id}, 'rejected')">거절</button>
+              ` : c.status === 'approved' ? `
+                <button class="btn-reject" onclick="updateCoach(${c.id}, 'rejected')">거절</button>
+              ` : `
+                <button class="btn-approve" onclick="updateCoach(${c.id}, 'approved')">승인</button>
+              `}
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function updateCoach(id, status) {
+      try {
+        await apiFetch(`/admin/coaches/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) });
+        await refreshAll();
+      } catch (err) { alert(err.message); }
+    }
+
+    /* ----- Venues ----- */
+    async function loadVenues() {
+      const { venues } = await apiFetch('/admin/venues');
+      document.getElementById('tab-count-venues').textContent = venues.length;
+      const tbody = document.getElementById('venues-tbody');
+      if (venues.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10"><div class="empty-state"><div class="empty-state-icon">🏟️</div>구장 신청이 없습니다.</div></td></tr>';
+        return;
+      }
+      tbody.innerHTML = venues.map(v => `
+        <tr>
+          <td>${v.id}</td>
+          <td><strong>${v.name}</strong></td>
+          <td>${v.owner_name}</td>
+          <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${v.address}</td>
+          <td>${v.venue_type}</td>
+          <td><div class="skill-tags">${v.equipment ? v.equipment.split(',').map(e => `<span class="skill-tag">${e}</span>`).join('') : '-'}</div></td>
+          <td>${v.hourly_rate ? '₩' + Number(v.hourly_rate).toLocaleString() : '-'}</td>
+          <td><span class="status-badge status-${v.status}">${statusLabel(v.status)}</span></td>
+          <td>${formatDate(v.created_at)}</td>
+          <td>
+            <div class="admin-actions">
+              ${v.status === 'pending' ? `
+                <button class="btn-approve" onclick="updateVenue(${v.id}, 'approved')">승인</button>
+                <button class="btn-reject" onclick="updateVenue(${v.id}, 'rejected')">거절</button>
+              ` : v.status === 'approved' ? `
+                <button class="btn-reject" onclick="updateVenue(${v.id}, 'rejected')">거절</button>
+              ` : `
+                <button class="btn-approve" onclick="updateVenue(${v.id}, 'approved')">승인</button>
+              `}
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function updateVenue(id, status) {
+      try {
+        await apiFetch(`/admin/venues/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) });
+        await refreshAll();
+      } catch (err) { alert(err.message); }
+    }
+
+    /* ----- Helpers ----- */
+    function statusLabel(s) {
+      return { pending: '대기', approved: '승인', rejected: '거절', coach_accepted: '코치 수락', confirmed: '확정' }[s] || s;
+    }
+
+    function formatDate(d) {
+      if (!d) return '-';
+      const date = new Date(d);
+      return `${date.getFullYear()}.${String(date.getMonth()+1).padStart(2,'0')}.${String(date.getDate()).padStart(2,'0')}`;
+    }
+
+    /* ----- Bookings ----- */
+    let approvedVenues = [];
+
+    async function loadBookings() {
+      const { bookings } = await apiFetch('/admin/bookings');
+      const { venues } = await apiFetch('/admin/venues-approved');
+      approvedVenues = venues;
+
+      document.getElementById('tab-count-bookings').textContent = bookings.length;
+      const tbody = document.getElementById('bookings-tbody');
+      if (bookings.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9"><div class="empty-state"><div class="empty-state-icon">📋</div>예약이 없습니다.</div></td></tr>';
+        return;
+      }
+      const planLabels = { trial: '체험 레슨', monthly: '정기 8회', camp: '집중 4회' };
+      tbody.innerHTML = bookings.map(b => `
+        <tr>
+          <td>${b.id}</td>
+          <td><strong>${b.student_name}</strong><br><span style="font-size:0.7rem;color:var(--text-muted);">${b.student_phone}</span></td>
+          <td><strong>${b.coach_name}</strong></td>
+          <td>${planLabels[b.plan_type] || b.plan_type}</td>
+          <td>${b.lesson_date}<br>${b.lesson_time}</td>
+          <td>₩${Number(b.total_price).toLocaleString()}<br><span style="font-size:0.68rem;color:var(--text-muted);">레슨 ₩${Number(b.lesson_price).toLocaleString()} + 구장 ₩${Number(b.venue_price).toLocaleString()}</span></td>
+          <td>${b.venue_name ? b.venue_name : (b.status === 'coach_accepted' ? buildVenueSelect(b.id) : '<span style="color:var(--text-muted);font-size:0.75rem;">미배정</span>')}</td>
+          <td><span class="status-badge status-${b.status}">${statusLabel(b.status)}</span></td>
+          <td>
+            <div class="admin-actions">
+              ${b.status === 'coach_accepted' ? `<button class="btn-approve" onclick="assignVenue(${b.id})">구장 배정</button>` : ''}
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function buildVenueSelect(bookingId) {
+      if (approvedVenues.length === 0) return '<span style="color:#DC2626;font-size:0.72rem;">승인된 구장 없음</span>';
+      return `<select id="venue-select-${bookingId}" style="font-size:0.75rem;padding:4px 6px;border-radius:6px;border:1px solid var(--border);">
+        <option value="">구장 선택</option>
+        ${approvedVenues.map(v => `<option value="${v.id}">${v.name} (${v.region})</option>`).join('')}
+      </select>`;
+    }
+
+    async function assignVenue(bookingId) {
+      const select = document.getElementById(`venue-select-${bookingId}`);
+      if (!select || !select.value) {
+        alert('구장을 선택해주세요.');
+        return;
+      }
+      try {
+        await apiFetch(`/bookings/${bookingId}/assign-venue`, {
+          method: 'PATCH',
+          body: JSON.stringify({ venue_id: parseInt(select.value) })
+        });
+        alert('✅ 구장이 배정되고 예약이 확정되었습니다.');
+        await refreshAll();
+      } catch (err) { alert(err.message); }
+    }
+
+    async function refreshAll() {
+      const stats = await apiFetch('/admin/stats');
+      renderStats(stats);
+      loadUsers();
+      loadCoaches();
+      loadVenues();
+      loadBookings();
+    }
+
+    /* ----- Tab switching ----- */
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('panel-' + tab.dataset.panel).classList.add('active');
+      });
+    });
+
+    /* ----- Nav UI ----- */
+    document.addEventListener('DOMContentLoaded', () => {
+      updateNavUI();
+      initAdmin();
+    });
+  </script>
+</body>
+</html>

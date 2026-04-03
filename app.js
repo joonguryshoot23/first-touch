@@ -77,8 +77,10 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
 /* ---------- Plan selection ---------- */
 const planOptions = document.querySelectorAll('.plan-option');
-const planPrices = { trial: 65000, monthly: 440000, camp: 260000 };
-const planNames  = { trial: '체험 레슨 (60분)', monthly: '정기 패키지 8회', camp: '집중 캠프 4회' };
+const planPrices     = { trial: 65000, monthly: 440000, camp: 260000 };
+const planLesson     = { trial: 50000, monthly: 320000, camp: 200000 };
+const planVenue      = { trial: 15000, monthly: 120000, camp: 60000 };
+const planNames      = { trial: '체험 레슨 (60분)', monthly: '정기 패키지 8회', camp: '집중 캠프 4회' };
 let selectedPlan = 'trial';
 
 planOptions.forEach(opt => {
@@ -105,8 +107,6 @@ if (calGrid) {
 
   let selectedDate  = null;
   let selectedTime  = null;
-  let selectedVenue = null;
-  let venuePrice    = 0;
 
   const MONTHS = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
   const DAYS   = ['일','월','화','수','목','금','토'];
@@ -114,7 +114,6 @@ if (calGrid) {
   function renderCalendar() {
     calTitle.textContent = `${viewYear}년 ${MONTHS[viewMonth]}`;
 
-    // Remove old day cells only (keep DOW headers — first 7 children)
     const children = Array.from(calGrid.children);
     children.slice(7).forEach(c => c.remove());
 
@@ -142,13 +141,12 @@ if (calGrid) {
         el.addEventListener('click', () => {
           selectedDate  = new Date(viewYear, viewMonth, d);
           selectedTime  = null;
-          selectedVenue = null;
-          venuePrice    = 0;
           renderCalendar();
           document.getElementById('time-section').classList.add('show');
-          document.getElementById('venue-section').classList.remove('show');
           document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-          resetVenueUI();
+          // Hide venue section until time is selected
+          const venueSection = document.getElementById('venue-section');
+          if (venueSection) venueSection.classList.remove('show');
           updateSummary();
           updateBookBtn();
         });
@@ -158,15 +156,6 @@ if (calGrid) {
     }
   }
 
-  function resetVenueUI() {
-    document.querySelectorAll('.venue-option').forEach(v => {
-      v.classList.remove('selected');
-      const r = v.querySelector('input'); if (r) r.checked = false;
-    });
-    selectedVenue = null;
-    venuePrice    = 0;
-  }
-
   /* Time slots */
   document.querySelectorAll('.time-slot').forEach(slot => {
     slot.addEventListener('click', () => {
@@ -174,26 +163,9 @@ if (calGrid) {
       document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
       slot.classList.add('selected');
       selectedTime = slot.dataset.time;
-      document.getElementById('venue-section').classList.add('show');
-      updateSummary();
-      updateBookBtn();
-    });
-  });
-
-  /* Venue selection */
-  const venuePrices = { v1: 20000, v2: 30000, v3: 40000 };
-  const venueNames  = { v1: '강남 풋살파크 A구장', v2: '역삼 스포츠센터 풋살장', v3: '잠실 드림 풋볼파크' };
-
-  document.querySelectorAll('.venue-option').forEach(opt => {
-    opt.addEventListener('click', () => {
-      document.querySelectorAll('.venue-option').forEach(v => v.classList.remove('selected'));
-      opt.classList.add('selected');
-      const radio = opt.querySelector('input[type=radio]');
-      if (radio) {
-        radio.checked = true;
-        selectedVenue = radio.value;
-        venuePrice    = venuePrices[selectedVenue] || 0;
-      }
+      // Show venue assigned info
+      const venueSection = document.getElementById('venue-section');
+      if (venueSection) venueSection.classList.add('show');
       updateSummary();
       updateBookBtn();
     });
@@ -206,13 +178,13 @@ if (calGrid) {
     summary.classList.add('show');
 
     const sumLesson   = document.getElementById('summary-lesson');
+    const sumVenueFee = document.getElementById('summary-venue-fee');
     const sumDate     = document.getElementById('summary-date');
     const sumDateRow  = document.getElementById('summary-date-row');
-    const sumVenue    = document.getElementById('summary-venue');
-    const sumVenueRow = document.getElementById('summary-venue-row');
     const sumTotal    = document.getElementById('summary-total');
 
-    if (sumLesson) sumLesson.textContent = `${planNames[selectedPlan]} · ₩${planPrices[selectedPlan].toLocaleString()}`;
+    if (sumLesson) sumLesson.textContent = `₩${planLesson[selectedPlan].toLocaleString()}`;
+    if (sumVenueFee) sumVenueFee.textContent = `₩${planVenue[selectedPlan].toLocaleString()}`;
 
     if (selectedDate && selectedTime) {
       if (sumDate) sumDate.textContent = `${selectedDate.getMonth()+1}월 ${selectedDate.getDate()}일 (${DAYS[selectedDate.getDay()]}) ${selectedTime}`;
@@ -221,14 +193,7 @@ if (calGrid) {
       if (sumDateRow) sumDateRow.style.display = 'none';
     }
 
-    if (selectedVenue) {
-      if (sumVenue) sumVenue.textContent = `${venueNames[selectedVenue]} · +₩${venuePrice.toLocaleString()}`;
-      if (sumVenueRow) sumVenueRow.style.display = '';
-    } else {
-      if (sumVenueRow) sumVenueRow.style.display = 'none';
-    }
-
-    const total = planPrices[selectedPlan] + venuePrice;
+    const total = planPrices[selectedPlan];
     if (sumTotal) sumTotal.textContent = `₩${total.toLocaleString()}`;
   }
 
@@ -238,30 +203,49 @@ if (calGrid) {
     if (!btn) return;
 
     if (!selectedDate) {
-      btn.disabled = true; btn.textContent = '날짜를 선택해주세요'; btn.classList.remove('integrated'); return;
+      btn.disabled = true; btn.textContent = '날짜를 선택해주세요'; return;
     }
     if (!selectedTime) {
-      btn.disabled = true; btn.textContent = '시간을 선택해주세요'; btn.classList.remove('integrated'); return;
+      btn.disabled = true; btn.textContent = '시간을 선택해주세요'; return;
     }
-    if (!selectedVenue) {
-      btn.disabled = false; btn.textContent = '레슨 요청하기'; btn.classList.remove('integrated'); return;
-    }
-    const total = planPrices[selectedPlan] + venuePrice;
+    const total = planPrices[selectedPlan];
     btn.disabled = false;
-    btn.innerHTML = `⚽ 레슨 + 구장 통합 결제 · ₩${total.toLocaleString()}`;
-    btn.classList.add('integrated');
+    btn.innerHTML = `⚽ 레슨 예약하기 · ₩${total.toLocaleString()} (구장·기구 포함)`;
   }
 
   const bookBtn = document.getElementById('btn-book');
   if (bookBtn) {
-    bookBtn.addEventListener('click', () => {
+    bookBtn.addEventListener('click', async () => {
       if (bookBtn.disabled) return;
-      const isIntegrated = selectedVenue !== null;
-      const total = planPrices[selectedPlan] + venuePrice;
-      if (isIntegrated) {
-        alert(`✅ 예약이 완료되었습니다!\n\n레슨: ${planNames[selectedPlan]}\n일시: ${selectedDate.getMonth()+1}월 ${selectedDate.getDate()}일 ${selectedTime}\n구장: ${venueNames[selectedVenue]}\n합계: ₩${total.toLocaleString()}\n\n결제 페이지로 이동합니다.`);
-      } else {
-        alert(`✅ 레슨 요청이 완료되었습니다!\n\n레슨: ${planNames[selectedPlan]}\n일시: ${selectedDate.getMonth()+1}월 ${selectedDate.getDate()}일 ${selectedTime}\n\n코치 확인 후 매칭이 확정됩니다.`);
+
+      // Check login
+      if (typeof getToken === 'function' && !getToken()) {
+        alert('레슨을 예약하려면 먼저 로그인해주세요.');
+        window.location.href = '/login.html';
+        return;
+      }
+
+      const dateStr = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth()+1).padStart(2,'0')}-${String(selectedDate.getDate()).padStart(2,'0')}`;
+
+      bookBtn.disabled = true;
+      bookBtn.textContent = '예약 중...';
+
+      try {
+        if (typeof createBooking === 'function') {
+          await createBooking({
+            coach_id: 1, // TODO: dynamic coach ID
+            plan_type: selectedPlan,
+            lesson_date: dateStr,
+            lesson_time: selectedTime,
+            lesson_price: planLesson[selectedPlan],
+            venue_price: planVenue[selectedPlan]
+          });
+        }
+        alert(`✅ 레슨 요청이 완료되었습니다!\n\n레슨: ${planNames[selectedPlan]}\n레슨비: ₩${planLesson[selectedPlan].toLocaleString()}\n구장·기구: ₩${planVenue[selectedPlan].toLocaleString()}\n합계: ₩${planPrices[selectedPlan].toLocaleString()}\n일시: ${dateStr} ${selectedTime}\n\n코치 확인 후 구장 배정과 함께 최종 확정 안내드립니다.`);
+        window.location.href = '/mypage.html#bookings';
+      } catch (err) {
+        alert('예약 실패: ' + err.message);
+        updateBookBtn();
       }
     });
   }

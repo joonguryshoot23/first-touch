@@ -94,4 +94,16 @@ db.exec(`
   )
 `);
 
+// ===== 인덱스 (검색 성능 최적화) =====
+db.exec(`CREATE INDEX IF NOT EXISTS idx_coaches_user_id ON coaches(user_id)`);
+db.exec(`CREATE INDEX IF NOT EXISTS idx_coaches_status ON coaches(status)`);
+db.exec(`CREATE INDEX IF NOT EXISTS idx_venues_user_id ON venues(user_id)`);
+db.exec(`CREATE INDEX IF NOT EXISTS idx_venues_status ON venues(status)`);
+db.exec(`CREATE INDEX IF NOT EXISTS idx_bookings_student_id ON bookings(student_id)`);
+db.exec(`CREATE INDEX IF NOT EXISTS idx_bookings_coach_id ON bookings(coach_id)`);
+db.exec(`CREATE INDEX IF NOT EXISTS idx_bookings_lesson_date ON bookings(lesson_date)`);
+db.exec(`CREATE INDEX IF NOT EXISTS idx_bookings_status ON bookings(status)`);
+db.exec(`CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id)`);
+db.exec(`CREATE INDEX IF NOT EXISTS idx_notifications_is_read ON notifications(user_id, is_read)`);
+
 module.exports = db;

@@ -4,6 +4,14 @@
 
 const API_BASE = '/api';
 
+/* ---------- 텍스트 이스케이프 (XSS 방지) ---------- */
+function escapeHtml(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 /* ---------- Token 관리 ---------- */
 function getToken() {
   return localStorage.getItem('ft_token');
@@ -20,7 +28,12 @@ function removeToken() {
 
 function getUser() {
   const raw = localStorage.getItem('ft_user');
-  return raw ? JSON.parse(raw) : null;
+  try {
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    removeToken();
+    return null;
+  }
 }
 
 function setUser(user) {
@@ -103,7 +116,7 @@ async function getCoachBookings() {
 }
 
 async function respondToBooking(bookingId, action) {
-  return apiFetch(`/bookings/${bookingId}/coach-respond`, {
+  return apiFetch(`/bookings/${encodeURIComponent(bookingId)}/coach-respond`, {
     method: 'PATCH',
     body: JSON.stringify({ action })
   });
@@ -132,51 +145,124 @@ function updateNavUI() {
     if (loginBtn) loginBtn.remove();
     if (signupBtn) signupBtn.remove();
 
-    // Add admin tab in nav-links if admin
+    // Add admin tab in nav-links if admin (서버에서 검증하므로 UI만 표시)
     if (user.is_admin) {
       const navLinks = document.querySelector('.nav-links');
       if (navLinks && !navLinks.querySelector('a[href="admin.html"]')) {
         const li = document.createElement('li');
-        li.innerHTML = '<a href="admin.html" style="color:#D97706;font-weight:600;">관리자</a>';
+        const a = document.createElement('a');
+        a.href = 'admin.html';
+        a.style.color = '#D97706';
+        a.style.fontWeight = '600';
+        a.textContent = '관리자';
+        li.appendChild(a);
         navLinks.appendChild(li);
       }
     }
 
     // Check if user menu already exists
     if (!navActions.querySelector('.user-menu')) {
+      // ── 유저 메뉴 (안전한 DOM 생성) ──
       const userMenu = document.createElement('div');
       userMenu.className = 'user-menu';
-      userMenu.innerHTML = `
-        <button class="btn-user">
-          <span class="user-avatar-sm">${user.name.charAt(0)}</span>
-          <span class="user-name-sm">${user.name}</span>
-        </button>
-        <div class="user-dropdown">
-          <a href="mypage.html" class="dropdown-item">마이페이지</a>
-          ${user.is_admin ? '<a href="admin.html" class="dropdown-item">관리자 대시보드</a>' : ''}
-          <a href="#" class="dropdown-item" onclick="logout(); return false;">로그아웃</a>
-        </div>
-      `;
+
+      const btn = document.createElement('button');
+      btn.className = 'btn-user';
+
+      const avatar = document.createElement('span');
+      avatar.className = 'user-avatar-sm';
+      avatar.textContent = user.name ? user.name.charAt(0) : '?';
+
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'user-name-sm';
+      nameSpan.textContent = user.name || '';
+
+      btn.appendChild(avatar);
+      btn.appendChild(nameSpan);
+
+      const dropdown = document.createElement('div');
+      dropdown.className = 'user-dropdown';
+
+      const mypageLink = document.createElement('a');
+      mypageLink.href = 'mypage.html';
+      mypageLink.className = 'dropdown-item';
+      mypageLink.textContent = '마이페이지';
+      dropdown.appendChild(mypageLink);
+
+      if (user.is_admin) {
+        const adminLink = document.createElement('a');
+        adminLink.href = 'admin.html';
+        adminLink.className = 'dropdown-item';
+        adminLink.textContent = '관리자 대시보드';
+        dropdown.appendChild(adminLink);
+      }
+
+      const logoutLink = document.createElement('a');
+      logoutLink.href = '#';
+      logoutLink.className = 'dropdown-item';
+      logoutLink.textContent = '로그아웃';
+      logoutLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        logout();
+      });
+      dropdown.appendChild(logoutLink);
+
+      userMenu.appendChild(btn);
+      userMenu.appendChild(dropdown);
       navActions.insertBefore(userMenu, navActions.firstChild);
 
-      // Add notification bell before user menu
+      // ── 알림 벨 (안전한 DOM 생성) ──
       const bellWrap = document.createElement('div');
       bellWrap.className = 'notif-bell-wrap';
-      bellWrap.innerHTML = `
-        <button class="btn-notif-bell" title="알림">🔔 <span class="notif-badge" id="notif-badge" style="display:none;">0</span></button>
-        <div class="notif-dropdown" id="notif-dropdown">
-          <div class="notif-dropdown-header">
-            <span>알림</span>
-            <button class="notif-read-all" onclick="markAllRead()">모두 읽음</button>
-          </div>
-          <div class="notif-list" id="notif-list"><div class="empty-state" style="padding:24px;font-size:0.8rem;">알림이 없습니다.</div></div>
-        </div>
-      `;
+
+      const bellBtn = document.createElement('button');
+      bellBtn.className = 'btn-notif-bell';
+      bellBtn.title = '알림';
+      bellBtn.textContent = '🔔 ';
+
+      const badge = document.createElement('span');
+      badge.className = 'notif-badge';
+      badge.id = 'notif-badge';
+      badge.style.display = 'none';
+      badge.textContent = '0';
+      bellBtn.appendChild(badge);
+
+      const bellDropdown = document.createElement('div');
+      bellDropdown.className = 'notif-dropdown';
+      bellDropdown.id = 'notif-dropdown';
+
+      const ddHeader = document.createElement('div');
+      ddHeader.className = 'notif-dropdown-header';
+
+      const ddTitle = document.createElement('span');
+      ddTitle.textContent = '알림';
+      ddHeader.appendChild(ddTitle);
+
+      const readAllBtn = document.createElement('button');
+      readAllBtn.className = 'notif-read-all';
+      readAllBtn.textContent = '모두 읽음';
+      readAllBtn.addEventListener('click', markAllRead);
+      ddHeader.appendChild(readAllBtn);
+
+      bellDropdown.appendChild(ddHeader);
+
+      const notifList = document.createElement('div');
+      notifList.className = 'notif-list';
+      notifList.id = 'notif-list';
+
+      const emptyMsg = document.createElement('div');
+      emptyMsg.className = 'empty-state';
+      emptyMsg.style.padding = '24px';
+      emptyMsg.style.fontSize = '0.8rem';
+      emptyMsg.textContent = '알림이 없습니다.';
+      notifList.appendChild(emptyMsg);
+
+      bellDropdown.appendChild(notifList);
+      bellWrap.appendChild(bellBtn);
+      bellWrap.appendChild(bellDropdown);
       navActions.insertBefore(bellWrap, userMenu);
 
       // Toggle bell dropdown
-      const bellBtn = bellWrap.querySelector('.btn-notif-bell');
-      const bellDropdown = bellWrap.querySelector('.notif-dropdown');
       bellBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         bellDropdown.classList.toggle('show');
@@ -184,8 +270,6 @@ function updateNavUI() {
       });
 
       // Toggle user dropdown
-      const btn = userMenu.querySelector('.btn-user');
-      const dropdown = userMenu.querySelector('.user-dropdown');
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         dropdown.classList.toggle('show');
@@ -223,17 +307,41 @@ async function loadNotifications() {
     const { notifications } = await getNotifications();
     const list = document.getElementById('notif-list');
     if (!list) return;
+
+    list.innerHTML = '';
+
     if (notifications.length === 0) {
-      list.innerHTML = '<div style="padding:24px;text-align:center;font-size:0.8rem;color:#9CA3AF;">알림이 없습니다.</div>';
+      const empty = document.createElement('div');
+      empty.style.padding = '24px';
+      empty.style.textAlign = 'center';
+      empty.style.fontSize = '0.8rem';
+      empty.style.color = '#9CA3AF';
+      empty.textContent = '알림이 없습니다.';
+      list.appendChild(empty);
       return;
     }
-    list.innerHTML = notifications.slice(0, 20).map(n => `
-      <div class="notif-item ${n.is_read ? '' : 'unread'}">
-        <div class="notif-title">${n.title}</div>
-        <div class="notif-msg">${n.message}</div>
-        <div class="notif-time">${timeAgo(n.created_at)}</div>
-      </div>
-    `).join('');
+
+    notifications.slice(0, 20).forEach(n => {
+      const item = document.createElement('div');
+      item.className = 'notif-item' + (n.is_read ? '' : ' unread');
+
+      const title = document.createElement('div');
+      title.className = 'notif-title';
+      title.textContent = n.title;
+
+      const msg = document.createElement('div');
+      msg.className = 'notif-msg';
+      msg.textContent = n.message;
+
+      const time = document.createElement('div');
+      time.className = 'notif-time';
+      time.textContent = timeAgo(n.created_at);
+
+      item.appendChild(title);
+      item.appendChild(msg);
+      item.appendChild(time);
+      list.appendChild(item);
+    });
   } catch (e) { /* ignore */ }
 }
 

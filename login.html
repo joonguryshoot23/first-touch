@@ -9,7 +9,7 @@
 <body>
 
   <!-- ===== NAVBAR ===== -->
-  <nav class="navbar">
+  <nav class="navbar" role="navigation" aria-label="메인 메뉴">
     <div class="container">
       <div class="nav-left">
         <a href="index.html" class="nav-logo">
@@ -57,7 +57,7 @@
           <div class="form-group">
             <label class="form-label">
               비밀번호
-              <a href="#" class="form-link">비밀번호 찾기</a>
+              <a href="#" class="form-link" onclick="alert('비밀번호 찾기는 support@firsttouch.kr로 문의해주세요.'); return false;">비밀번호 찾기</a>
             </label>
             <input type="password" class="form-input" id="login-password" placeholder="비밀번호를 입력해주세요" required />
           </div>
@@ -91,7 +91,7 @@
           <div class="form-agree">
             <label class="skill-check">
               <input type="checkbox" id="signup-agree" required />
-              <span><a href="#" style="color:var(--green);">이용약관</a> 및 <a href="#" style="color:var(--green);">개인정보처리방침</a>에 동의합니다</span>
+              <span><a href="terms.html" style="color:var(--green);">이용약관</a> 및 <a href="privacy.html" style="color:var(--green);">개인정보처리방침</a>에 동의합니다</span>
             </label>
           </div>
           <button type="submit" class="btn-book" style="margin-top:4px;" id="signup-btn">회원가입</button>
@@ -103,14 +103,14 @@
       </div>
 
       <div class="social-login">
-        <button class="btn-social kakao" onclick="alert('카카오 로그인은 준비 중입니다.')">
-          <span class="social-icon">💬</span> 카카오로 계속하기
+        <button class="btn-social kakao" disabled title="준비 중">
+          <span class="social-icon">💬</span> 카카오로 계속하기 (준비 중)
         </button>
-        <button class="btn-social google" onclick="alert('Google 로그인은 준비 중입니다.')">
-          <span class="social-icon">G</span> Google로 계속하기
+        <button class="btn-social google" disabled title="준비 중">
+          <span class="social-icon">G</span> Google로 계속하기 (준비 중)
         </button>
-        <button class="btn-social naver" onclick="alert('네이버 로그인은 준비 중입니다.')">
-          <span class="social-icon">N</span> 네이버로 계속하기
+        <button class="btn-social naver" disabled title="준비 중">
+          <span class="social-icon">N</span> 네이버로 계속하기 (준비 중)
         </button>
       </div>
     </div>

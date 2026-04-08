@@ -10,6 +10,9 @@ function authenticateToken(req, res, next) {
 
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET);
+    if (!user || !user.id) {
+      return res.status(403).json({ error: '유효하지 않은 토큰입니다.' });
+    }
     req.user = user;
     next();
   } catch (err) {

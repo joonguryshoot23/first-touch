@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>이용약관 — First Touch</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .terms-hero {
+      padding: 80px 0 32px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+    }
+    .terms-hero h1 { margin-bottom: 8px; }
+    .terms-hero p { color: var(--text-secondary); font-size: 0.9rem; }
+
+    .terms-body {
+      padding: 48px 0 80px;
+    }
+    .terms-body .container {
+      max-width: 780px;
+    }
+    .terms-toc {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 40px;
+    }
+    .terms-toc h3 {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .terms-toc ol {
+      list-style: none;
+      counter-reset: toc;
+      padding: 0;
+    }
+    .terms-toc ol li {
+      counter-increment: toc;
+      margin-bottom: 6px;
+    }
+    .terms-toc ol li a {
+      color: var(--accent);
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color var(--transition);
+    }
+    .terms-toc ol li a:hover {
+      color: #1B6EC2;
+      text-decoration: underline;
+    }
+    .terms-toc ol li a::before {
+      content: counter(toc) ". ";
+      color: var(--text-muted);
+    }
+
+    .terms-section {
+      margin-bottom: 36px;
+    }
+    .terms-section h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--text-primary);
+    }
+    .terms-section h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin: 16px 0 8px;
+      color: var(--text-primary);
+    }
+    .terms-section p,
+    .terms-section li {
+      font-size: 0.88rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+    }
+    .terms-section ul,
+    .terms-section ol {
+      padding-left: 20px;
+      margin: 8px 0 12px;
+    }
+    .terms-section li {
+      margin-bottom: 4px;
+    }
+    .terms-section .highlight-box {
+      background: #FEF3C7;
+      border: 1px solid #F59E0B;
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin: 12px 0;
+      font-size: 0.85rem;
+      color: #92400E;
+    }
+    .terms-section .info-box {
+      background: var(--accent-light);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin: 12px 0;
+      font-size: 0.85rem;
+      color: #1E40AF;
+    }
+    .terms-section table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 0.85rem;
+    }
+    .terms-section table th,
+    .terms-section table td {
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      text-align: left;
+    }
+    .terms-section table th {
+      background: var(--bg-secondary);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .terms-section table td {
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" role="navigation" aria-label="메인 메뉴">
+    <div class="container">
+      <div class="nav-left">
+        <a href="index.html" class="nav-logo">
+          <span class="ball">⚽</span> First<span>Touch</span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="index.html">레슨 찾기</a></li>
+          <li><a href="community.html">커뮤니티</a></li>
+        </ul>
+      </div>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-outline">로그인</a>
+        <a href="login.html#signup" class="btn-outline">회원가입</a>
+        <a href="register-coach.html" class="btn-coach-reg">코치 등록</a>
+        <a href="register-venue.html" class="btn-venue-reg">구장 등록</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="terms-hero">
+    <div class="container" style="max-width:780px;">
+      <h1>이용약관</h1>
+      <p>시행일: 2026년 4월 8일 | 최종 수정: 2026년 4월 8일</p>
+    </div>
+  </section>
+
+  <!-- ===== BODY ===== -->
+  <section class="terms-body">
+    <div class="container">
+
+      <!-- 목차 -->
+      <div class="terms-toc">
+        <h3>목차</h3>
+        <ol>
+          <li><a href="#s1">총칙 (목적 및 정의)</a></li>
+          <li><a href="#s2">회원가입 및 계정</a></li>
+          <li><a href="#s3">서비스 이용 — 수강생</a></li>
+          <li><a href="#s4">서비스 이용 — 코치</a></li>
+          <li><a href="#s5">서비스 이용 — 구장 파트너</a></li>
+          <li><a href="#s6">레슨 플랜 및 요금</a></li>
+          <li><a href="#s7">예약 · 확정 · 구장 배정</a></li>
+          <li><a href="#s8">취소 및 환불 정책</a></li>
+          <li><a href="#s9">코치 페널티 제도</a></li>
+          <li><a href="#s10">개인정보 수집 및 보호</a></li>
+          <li><a href="#s11">금지행위</a></li>
+          <li><a href="#s12">지적재산권</a></li>
+          <li><a href="#s13">면책 및 책임 제한</a></li>
+          <li><a href="#s14">약관 변경</a></li>
+          <li><a href="#s15">분쟁 해결</a></li>
+          <li><a href="#s16">연락처</a></li>
+        </ol>
+      </div>
+
+      <!-- 제1조 -->
+      <div class="terms-section" id="s1">
+        <h2>제1조 — 총칙 (목적 및 정의)</h2>
+        <p>본 약관은 <strong>First Touch</strong>(이하 "회사")가 운영하는 축구 레슨 전문 코치-수강생 매칭 플랫폼(이하 "서비스")의 이용 조건 및 절차, 회사와 이용자 간의 권리·의무·책임사항을 규정함을 목적으로 합니다.</p>
+
+        <h3>1.1 정의</h3>
+        <ul>
+          <li><strong>서비스</strong>: First Touch 웹사이트(firsttouch.kr) 및 관련 API를 통해 제공되는 축구 레슨 매칭, 예약, 구장 통합 예약 등 일체의 서비스</li>
+          <li><strong>이용자(회원)</strong>: 본 약관에 동의하고 회원가입을 완료한 자</li>
+          <li><strong>수강생</strong>: 코치에게 레슨을 예약·수강하는 이용자</li>
+          <li><strong>코치</strong>: 회사의 심사를 거쳐 승인된 축구 레슨 제공자</li>
+          <li><strong>구장 파트너</strong>: 레슨 장소로 등록·승인된 축구 구장 운영자</li>
+          <li><strong>관리자</strong>: 서비스 운영 및 코치·구장 승인, 예약 관리 권한을 가진 회사 담당자</li>
+          <li><strong>레슨 플랜</strong>: 체험 레슨, 정기 패키지, 집중 캠프 등 서비스에서 제공하는 레슨 유형</li>
+        </ul>
+      </div>
+
+      <!-- 제2조 -->
+      <div class="terms-section" id="s2">
+        <h2>제2조 — 회원가입 및 계정</h2>
+
+        <h3>2.1 가입 요건</h3>
+        <ul>
+          <li>이름, 이메일, 전화번호(01X-XXXX-XXXX 형식), 비밀번호를 정확히 입력해야 합니다.</li>
+          <li>비밀번호는 <strong>8자 이상</strong>, <strong>영문과 숫자를 모두 포함</strong>해야 합니다.</li>
+          <li>이름은 50자 이내, 이메일은 중복 가입이 불가합니다.</li>
+        </ul>
+
+        <h3>2.2 계정 관리</h3>
+        <ul>
+          <li>로그인 시 JWT(JSON Web Token) 기반 인증이 적용되며, 토큰 유효기간은 <strong>7일</strong>입니다.</li>
+          <li>회원은 자신의 계정 정보를 안전하게 관리할 의무가 있으며, 타인에게 계정을 양도·공유할 수 없습니다.</li>
+          <li>비밀번호는 bcrypt 알고리즘으로 암호화 저장되며, 회사는 평문 비밀번호를 보관하지 않습니다.</li>
+        </ul>
+
+        <h3>2.3 보안 정책</h3>
+        <ul>
+          <li>로그인 및 회원가입 시도는 <strong>15분당 최대 20회</strong>로 제한됩니다.</li>
+          <li>전체 API 요청은 <strong>1분당 최대 100회</strong>로 제한됩니다.</li>
+          <li>비정상적인 접근이 감지되면 계정이 일시적으로 제한될 수 있습니다.</li>
+        </ul>
+      </div>
+
+      <!-- 제3조 -->
+      <div class="terms-section" id="s3">
+        <h2>제3조 — 서비스 이용 — 수강생</h2>
+
+        <h3>3.1 코치 검색 및 필터</h3>
+        <ul>
+          <li>지역별(서울, 경기, 인천, 부산, 대구, 대전) 코치 검색이 가능합니다.</li>
+          <li>카테고리 필터: 슈팅, 드리블, 수비, 골키퍼, 패싱 &amp; 전술, 피지컬, 유소년</li>
+          <li>정렬: 추천순, 평점 높은순, 가격 낮은순, 리뷰 많은순</li>
+        </ul>
+
+        <h3>3.2 예약 절차</h3>
+        <ol>
+          <li>코치 프로필에서 레슨 플랜(체험/정기/캠프)을 선택합니다.</li>
+          <li>캘린더에서 코치의 활성 스케줄이 있는 날짜를 선택합니다.</li>
+          <li>해당 날짜의 가용 시간 슬롯 중 원하는 시간을 선택합니다.</li>
+          <li>"레슨 예약하기" 버튼을 누르면 <strong>즉시 확정</strong>됩니다.</li>
+        </ol>
+        <div class="info-box">
+          예약은 즉시 확정 방식입니다. 예약 완료 즉시 수강생과 코치 모두에게 알림이 전송됩니다.
+        </div>
+
+        <h3>3.3 선호 지역 설정</h3>
+        <p>마이페이지에서 선호 지역을 설정하면, 예약 시 해당 지역의 구장이 우선 배정됩니다.</p>
+      </div>
+
+      <!-- 제4조 -->
+      <div class="terms-section" id="s4">
+        <h2>제4조 — 서비스 이용 — 코치</h2>
+
+        <h3>4.1 코치 등록 및 심사</h3>
+        <ul>
+          <li>회원가입 후 코치 등록 신청이 가능합니다.</li>
+          <li>레슨 스킬(1개 이상)과 활동 지역을 필수 입력해야 합니다.</li>
+          <li>등록 신청 후 관리자 심사를 거치며, <strong>2~3 영업일 내</strong>에 결과가 안내됩니다.</li>
+          <li>심사 상태: 대기(pending) → 승인(approved) 또는 거절(rejected)</li>
+          <li>이미 심사 중이거나 승인된 경우 중복 신청할 수 없습니다.</li>
+        </ul>
+
+        <h3>4.2 스케줄 관리</h3>
+        <ul>
+          <li>승인된 코치만 스케줄을 관리할 수 있습니다.</li>
+          <li>요일별(일~토) 시작·종료 시간을 설정하며, HH:MM 형식을 따릅니다.</li>
+          <li>시작 시간은 반드시 종료 시간보다 빨라야 합니다.</li>
+          <li>레슨 시간(기본 60분) 단위로 시간 슬롯이 자동 생성됩니다.</li>
+        </ul>
+
+        <h3>4.3 가격 설정</h3>
+        <p>코치는 아래 세 가지 레슨 플랜의 가격을 자유롭게 설정할 수 있습니다. (기본 가격은 아래 표 참조)</p>
+      </div>
+
+      <!-- 제5조 -->
+      <div class="terms-section" id="s5">
+        <h2>제5조 — 서비스 이용 — 구장 파트너</h2>
+
+        <h3>5.1 구장 등록</h3>
+        <ul>
+          <li>구장 이름, 주소, 지역, 시설 정보 등을 입력하여 등록 신청합니다.</li>
+          <li>관리자 심사를 거쳐 승인된 구장만 레슨 예약 시 배정됩니다.</li>
+        </ul>
+
+        <h3>5.2 구장 자동 배정 방식</h3>
+        <p>예약 시 구장은 다음 우선순위로 자동 배정됩니다:</p>
+        <ol>
+          <li><strong>1순위</strong>: 수강생의 선호 지역 내 승인된 구장</li>
+          <li><strong>2순위</strong>: 코치 활동 지역 내 승인된 구장</li>
+          <li><strong>3순위</strong>: 전체 승인된 구장 중 무작위 배정</li>
+        </ol>
+        <p>자동 배정이 실패한 경우, 관리자에게 수동 배정 알림이 전송되며 관리자가 직접 구장을 배정합니다.</p>
+
+        <h3>5.3 구장 알림</h3>
+        <p>구장이 레슨에 배정되면, 해당 구장 파트너에게 이용 예약 알림이 전송됩니다.</p>
+      </div>
+
+      <!-- 제6조 -->
+      <div class="terms-section" id="s6">
+        <h2>제6조 — 레슨 플랜 및 요금</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>플랜</th>
+              <th>내용</th>
+              <th>기본 가격 (코치별 상이)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>체험 레슨 (trial)</strong></td>
+              <td>1회 체험 수업 (기본 60분)</td>
+              <td>₩65,000</td>
+            </tr>
+            <tr>
+              <td><strong>정기 패키지 (monthly)</strong></td>
+              <td>8회 레슨 패키지</td>
+              <td>₩440,000</td>
+            </tr>
+            <tr>
+              <td><strong>집중 캠프 (camp)</strong></td>
+              <td>4회 집중 레슨</td>
+              <td>₩260,000</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="highlight-box">
+          위 가격은 기본 가격이며, 코치가 개별적으로 가격을 설정할 수 있습니다. 표시 가격에는 구장 이용료가 포함되어 있습니다.
+        </div>
+      </div>
+
+      <!-- 제7조 -->
+      <div class="terms-section" id="s7">
+        <h2>제7조 — 예약 · 확정 · 구장 배정</h2>
+
+        <h3>7.1 예약 확정</h3>
+        <ul>
+          <li>예약은 <strong>즉시 확정(instant confirmation)</strong> 방식으로 운영됩니다.</li>
+          <li>로그인한 회원만 예약할 수 있습니다.</li>
+          <li>과거 날짜에는 예약할 수 없습니다.</li>
+          <li>동일 코치의 동일 날짜·시간에 중복 예약은 불가합니다.</li>
+          <li>코치의 스케줄이 없는 요일/시간에는 예약할 수 없습니다.</li>
+        </ul>
+
+        <h3>7.2 알림 체계</h3>
+        <p>예약이 확정되면 다음과 같이 알림이 전송됩니다:</p>
+        <ul>
+          <li><strong>수강생</strong>: 예약 확정 + 레슨 정보 + 구장 정보</li>
+          <li><strong>코치</strong>: 새 레슨 확정 + 수강생 이름 + 일시</li>
+          <li><strong>구장 파트너</strong>: 구장 이용 예약 알림</li>
+          <li><strong>관리자</strong>: 구장 자동 배정 실패 시 수동 배정 요청 알림</li>
+        </ul>
+      </div>
+
+      <!-- 제8조 -->
+      <div class="terms-section" id="s8">
+        <h2>제8조 — 취소 및 환불 정책</h2>
+
+        <h3>8.1 취소 가능 조건</h3>
+        <ul>
+          <li><strong>확정(confirmed)</strong> 상태의 예약만 취소할 수 있습니다.</li>
+          <li>수강생 본인 또는 해당 코치만 취소할 수 있습니다.</li>
+        </ul>
+
+        <h3>8.2 수강생 취소</h3>
+        <ul>
+          <li>수강생이 취소하면 예약 상태가 <strong>"수강생 취소(cancelled_by_student)"</strong>로 변경됩니다.</li>
+          <li>취소 시 코치에게 알림이 전송됩니다.</li>
+        </ul>
+
+        <h3>8.3 코치 취소</h3>
+        <ul>
+          <li>코치가 취소하면 예약 상태가 <strong>"코치 취소(cancelled_by_coach)"</strong>로 변경됩니다.</li>
+          <li>취소 시 수강생에게 알림이 전송됩니다.</li>
+          <li>코치 취소 시 <strong>페널티</strong>가 부과됩니다. (제9조 참조)</li>
+        </ul>
+
+        <div class="highlight-box">
+          환불은 결제 수단 및 취소 시점에 따라 개별 안내됩니다. 자세한 환불 기준은 고객센터로 문의해주세요.
+        </div>
+      </div>
+
+      <!-- 제9조 -->
+      <div class="terms-section" id="s9">
+        <h2>제9조 — 코치 페널티 제도</h2>
+
+        <h3>9.1 페널티 부과 기준</h3>
+        <ul>
+          <li>코치가 확정된 예약을 취소하면 <strong>1회당 1페널티</strong>가 부과됩니다.</li>
+          <li>페널티 사유와 해당 예약 정보가 기록됩니다.</li>
+        </ul>
+
+        <h3>9.2 누적 제재</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>누적 페널티</th>
+              <th>조치</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1~2회</td>
+              <td>경고 (기록 보관)</td>
+            </tr>
+            <tr>
+              <td><strong>3회 이상</strong></td>
+              <td><strong>코치 프로필 자동 숨김(hidden)</strong> — 검색·예약 불가 상태로 전환됩니다.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="highlight-box">
+          프로필이 숨김 처리된 코치는 고객센터를 통해 소명 후 복구를 신청할 수 있습니다.
+        </div>
+      </div>
+
+      <!-- 제10조 -->
+      <div class="terms-section" id="s10">
+        <h2>제10조 — 개인정보 수집 및 보호</h2>
+
+        <h3>10.1 수집 항목</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>항목</th>
+              <th>수집 목적</th>
+              <th>보관 기간</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>이름, 이메일, 전화번호</td>
+              <td>회원 식별, 레슨 예약 안내, 알림 발송</td>
+              <td>회원 탈퇴 시까지</td>
+            </tr>
+            <tr>
+              <td>비밀번호 (bcrypt 해시)</td>
+              <td>로그인 인증</td>
+              <td>회원 탈퇴 시까지</td>
+            </tr>
+            <tr>
+              <td>선호 지역</td>
+              <td>구장 자동 배정 최적화</td>
+              <td>회원 탈퇴 시까지</td>
+            </tr>
+            <tr>
+              <td>예약 내역</td>
+              <td>서비스 제공, 분쟁 해결</td>
+              <td>예약일로부터 1년</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>10.2 보안 조치</h3>
+        <ul>
+          <li>비밀번호: bcrypt 알고리즘으로 단방향 암호화 저장</li>
+          <li>인증 토큰: JWT 기반, 7일 만료</li>
+          <li>보안 헤더: Helmet 미들웨어 적용 (X-Frame-Options, X-Content-Type-Options 등)</li>
+          <li>CORS: 허용된 도메인만 접근 가능</li>
+          <li>Rate Limiting: 과도한 요청 자동 차단</li>
+          <li>입력값 검증: 모든 API 엔드포인트에서 서버사이드 검증 수행</li>
+          <li>XSS 방어: 사용자 입력 출력 시 이스케이프 처리</li>
+        </ul>
+
+        <h3>10.3 제3자 제공</h3>
+        <p>회사는 이용자의 개인정보를 제3자에게 제공하지 않습니다. 단, 다음의 경우는 예외로 합니다:</p>
+        <ul>
+          <li>레슨 예약 시 코치에게 수강생 이름·전화번호 제공 (레슨 진행 목적)</li>
+          <li>법령에 의한 요청이 있는 경우</li>
+        </ul>
+      </div>
+
+      <!-- 제11조 -->
+      <div class="terms-section" id="s11">
+        <h2>제11조 — 금지행위</h2>
+        <p>이용자는 다음 행위를 해서는 안 됩니다:</p>
+        <ol>
+          <li>타인의 계정을 도용하거나 개인정보를 무단 수집하는 행위</li>
+          <li>허위 정보로 회원가입 또는 코치/구장 등록을 신청하는 행위</li>
+          <li>서비스를 이용하여 불법적인 목적의 행위를 하는 것</li>
+          <li>서비스의 안정적 운영을 방해하는 행위 (대량 요청, 크롤링, 해킹 시도 등)</li>
+          <li>플랫폼을 우회하여 코치와 수강생 간 직접 거래를 유도하는 행위</li>
+          <li>허위 리뷰 작성 또는 평점 조작 행위</li>
+          <li>욕설, 비방, 차별적 표현 등 다른 이용자에게 불쾌감을 주는 행위</li>
+          <li>기타 관련 법령 및 본 약관에 위반되는 행위</li>
+        </ol>
+        <p>위반 시 회사는 경고, 서비스 이용 제한, 계정 정지 등의 조치를 취할 수 있습니다.</p>
+      </div>
+
+      <!-- 제12조 -->
+      <div class="terms-section" id="s12">
+        <h2>제12조 — 지적재산권</h2>
+        <ul>
+          <li>서비스의 디자인, 로고, 콘텐츠, 소프트웨어 등 일체의 지적재산권은 회사에 귀속됩니다.</li>
+          <li>이용자가 서비스 내에 게시한 콘텐츠(리뷰, 게시글 등)의 저작권은 해당 이용자에게 있으나, 서비스 운영을 위해 회사에 비독점적 이용 권한을 부여합니다.</li>
+          <li>회사의 사전 동의 없이 서비스의 콘텐츠를 복제·배포·전송하는 것을 금합니다.</li>
+        </ul>
+      </div>
+
+      <!-- 제13조 -->
+      <div class="terms-section" id="s13">
+        <h2>제13조 — 면책 및 책임 제한</h2>
+        <ul>
+          <li>회사는 코치와 수강생 간의 매칭 플랫폼을 제공하며, 레슨의 품질·결과에 대해 직접적인 책임을 지지 않습니다.</li>
+          <li>천재지변, 시스템 장애 등 불가항력적 사유로 서비스 제공이 불가한 경우 책임이 면제됩니다.</li>
+          <li>이용자 간 발생한 분쟁에 대해 회사는 중재를 위해 노력하되, 법적 책임을 지지 않습니다.</li>
+          <li>코치의 자격, 경력 등에 대해 회사는 심사를 진행하지만, 이를 완전히 보증하지는 않습니다.</li>
+          <li>구장 시설의 상태·안전에 대한 책임은 해당 구장 파트너에게 있습니다.</li>
+        </ul>
+      </div>
+
+      <!-- 제14조 -->
+      <div class="terms-section" id="s14">
+        <h2>제14조 — 약관 변경</h2>
+        <ul>
+          <li>회사는 관련 법령에 위배되지 않는 범위 내에서 약관을 변경할 수 있습니다.</li>
+          <li>변경 시 시행일 <strong>7일 전</strong>부터 서비스 내 공지합니다.</li>
+          <li>이용자에게 불리한 변경의 경우, <strong>30일 전</strong>에 개별 통지합니다.</li>
+          <li>변경된 약관에 동의하지 않는 이용자는 회원 탈퇴를 통해 이용 계약을 해지할 수 있습니다.</li>
+        </ul>
+      </div>
+
+      <!-- 제15조 -->
+      <div class="terms-section" id="s15">
+        <h2>제15조 — 분쟁 해결</h2>
+        <ul>
+          <li>본 약관과 관련된 분쟁은 대한민국 법률에 따라 해석합니다.</li>
+          <li>서비스 이용과 관련한 분쟁이 발생한 경우, 회사와 이용자는 원만한 해결을 위해 성실히 협의합니다.</li>
+          <li>협의가 이루어지지 않을 경우, 서울중앙지방법원을 관할 법원으로 합니다.</li>
+        </ul>
+      </div>
+
+      <!-- 제16조 -->
+      <div class="terms-section" id="s16">
+        <h2>제16조 — 연락처</h2>
+        <table>
+          <tbody>
+            <tr>
+              <th>회사명</th>
+              <td>First Touch Inc.</td>
+            </tr>
+            <tr>
+              <th>사업자등록번호</th>
+              <td>123-45-67890</td>
+            </tr>
+            <tr>
+              <th>주소</th>
+              <td>서울특별시 강남구</td>
+            </tr>
+            <tr>
+              <th>이메일</th>
+              <td>support@firsttouch.kr</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo">⚽ First<span>Touch</span></div>
+          <p>축구 레슨 전문 코치-수강생 매칭 플랫폼. 원하는 스킬의 전문 코치를 직접 찾고, 구장까지 한 번에 예약하세요.</p>
+        </div>
+        <div class="footer-col">
+          <h4>서비스</h4>
+          <ul>
+            <li><a href="index.html">레슨 찾기</a></li>
+            <li><a href="community.html">커뮤니티</a></li>
+            <li><a href="register-coach.html">코치 등록</a></li>
+            <li><a href="register-venue.html">구장 등록</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>카테고리</h4>
+          <ul>
+            <li><a href="#">슈팅 레슨</a></li>
+            <li><a href="#">드리블 레슨</a></li>
+            <li><a href="#">수비 레슨</a></li>
+            <li><a href="#">골키퍼 레슨</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>회사</h4>
+          <ul>
+            <li><a href="#">서비스 소개</a></li>
+            <li><a href="terms.html">이용약관</a></li>
+            <li><a href="privacy.html">개인정보처리방침</a></li>
+            <li><a href="#">고객센터</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 First Touch Inc. All rights reserved.</p>
+        <p>사업자등록번호: 123-45-67890 | 서울특별시 강남구</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="api.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -35,7 +35,7 @@ app.use(cors({
     }
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
@@ -60,7 +60,12 @@ const apiLimiter = rateLimit({
 app.use(express.json({ limit: '1mb' }));
 
 // Serve static files (HTML, CSS, JS)
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname), { index: 'index.html' }));
+
+// 루트 경로 → index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // Rate limiting 적용
 app.use('/api', apiLimiter);
@@ -74,6 +79,14 @@ app.use('/api/venues', venueRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/notifications', notificationRoutes);
+
+// 404 catch-all: serve 404.html for non-API routes
+app.use((req, res) => {
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ error: '요청하신 API를 찾을 수 없습니다.' });
+  }
+  res.status(404).sendFile(path.join(__dirname, '404.html'));
+});
 
 // ── 글로벌 에러 핸들러 (서버 크래시 방지) ──
 app.use((err, req, res, next) => {

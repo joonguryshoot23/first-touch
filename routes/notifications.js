@@ -7,9 +7,11 @@ const router = express.Router();
 /* Helper: send notification */
 function sendNotification(userId, type, title, message, bookingId) {
   try {
+    const safeTitle = (title || '').substring(0, 200);
+    const safeMessage = (message || '').substring(0, 1000);
     db.prepare(
       'INSERT INTO notifications (user_id, type, title, message, booking_id) VALUES (?, ?, ?, ?, ?)'
-    ).run(userId, type, title, message, bookingId || null);
+    ).run(userId, type, safeTitle, safeMessage, bookingId || null);
   } catch (err) {
     console.error('Notification send error:', err.message);
   }

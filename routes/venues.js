@@ -18,6 +18,11 @@ router.post('/', authenticateToken, (req, res) => {
       return res.status(400).json({ error: '입력값이 너무 깁니다.' });
     }
 
+    const existing = db.prepare("SELECT id FROM venues WHERE user_id = ? AND name = ? AND address = ?").get(req.user.id, name, address);
+    if (existing) {
+      return res.status(409).json({ error: '이미 동일한 구장이 등록되어 있습니다.' });
+    }
+
     const equipmentStr = Array.isArray(equipment) ? equipment.join(',') : (equipment || '');
 
     const result = db.prepare(`

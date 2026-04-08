@@ -125,7 +125,7 @@
 <body>
 
   <!-- ===== NAVBAR ===== -->
-  <nav class="navbar">
+  <nav class="navbar" role="navigation" aria-label="메인 메뉴">
     <div class="container">
       <div class="nav-left">
         <a href="index.html" class="nav-logo">
@@ -292,6 +292,13 @@
 
   <script src="api.js"></script>
   <script>
+    function escapeHtml(str) {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
     const token = getToken();
     const user = getUser();
 
@@ -329,7 +336,7 @@
       document.getElementById('stat-venues-sub').textContent = `대기 ${s.venues.pending} · 승인 ${s.venues.approved} · 거절 ${s.venues.rejected}`;
       if (s.bookings) {
         document.getElementById('stat-bookings').textContent = s.bookings.total;
-        document.getElementById('stat-bookings-sub').textContent = `대기 ${s.bookings.pending} · 수락 ${s.bookings.coach_accepted} · 확정 ${s.bookings.confirmed}`;
+        document.getElementById('stat-bookings-sub').textContent = `확정 ${s.bookings.confirmed || 0} · 미배정 ${s.bookings.no_venue || 0} · 취소 ${(s.bookings.cancelled_by_coach || 0) + (s.bookings.cancelled_by_student || 0)}`;
       }
     }
 
@@ -345,14 +352,14 @@
       tbody.innerHTML = users.map(u => `
         <tr>
           <td>${u.id}</td>
-          <td><strong>${u.name}</strong></td>
-          <td>${u.email}</td>
-          <td>${u.phone}</td>
+          <td><strong>${escapeHtml(u.name)}</strong></td>
+          <td>${escapeHtml(u.email)}</td>
+          <td>${escapeHtml(u.phone)}</td>
           <td>${formatDate(u.created_at)}</td>
           <td>${u.is_admin ? '<span class="status-badge status-approved">관리자</span>' : '일반'}</td>
           <td>
             <div class="admin-actions">
-              ${u.is_admin ? '' : `<button class="btn-delete" onclick="deleteUser(${u.id}, '${u.name}')">삭제</button>`}
+              ${u.is_admin ? '' : `<button class="btn-delete" data-action="delete-user" data-id="${u.id}" data-name="${escapeHtml(u.name)}">삭제</button>`}
             </div>
           </td>
         </tr>
@@ -379,11 +386,11 @@
       tbody.innerHTML = coaches.map(c => `
         <tr>
           <td>${c.id}</td>
-          <td><strong>${c.name}</strong></td>
-          <td>${c.email}</td>
-          <td><div class="skill-tags">${c.skills.split(',').map(s => `<span class="skill-tag">${s}</span>`).join('')}</div></td>
-          <td>${c.region}</td>
-          <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.bio || '-'}</td>
+          <td><strong>${escapeHtml(c.name)}</strong></td>
+          <td>${escapeHtml(c.email)}</td>
+          <td><div class="skill-tags">${escapeHtml(c.skills).split(',').map(s => `<span class="skill-tag">${s}</span>`).join('')}</div></td>
+          <td>${escapeHtml(c.region)}</td>
+          <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(c.bio) || '-'}</td>
           <td><span class="status-badge status-${c.status}">${statusLabel(c.status)}</span></td>
           <td>${formatDate(c.created_at)}</td>
           <td>
@@ -421,11 +428,11 @@
       tbody.innerHTML = venues.map(v => `
         <tr>
           <td>${v.id}</td>
-          <td><strong>${v.name}</strong></td>
-          <td>${v.owner_name}</td>
-          <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${v.address}</td>
-          <td>${v.venue_type}</td>
-          <td><div class="skill-tags">${v.equipment ? v.equipment.split(',').map(e => `<span class="skill-tag">${e}</span>`).join('') : '-'}</div></td>
+          <td><strong>${escapeHtml(v.name)}</strong></td>
+          <td>${escapeHtml(v.owner_name)}</td>
+          <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(v.address)}</td>
+          <td>${escapeHtml(v.venue_type)}</td>
+          <td><div class="skill-tags">${v.equipment ? escapeHtml(v.equipment).split(',').map(e => `<span class="skill-tag">${e}</span>`).join('') : '-'}</div></td>
           <td>${v.hourly_rate ? '₩' + Number(v.hourly_rate).toLocaleString() : '-'}</td>
           <td><span class="status-badge status-${v.status}">${statusLabel(v.status)}</span></td>
           <td>${formatDate(v.created_at)}</td>
@@ -454,7 +461,7 @@
 
     /* ----- Helpers ----- */
     function statusLabel(s) {
-      return { pending: '대기', approved: '승인', rejected: '거절', coach_accepted: '코치 수락', confirmed: '확정' }[s] || s;
+      return { pending: '대기', approved: '승인', rejected: '거절', coach_accepted: '코치 수락', confirmed: '확정', cancelled_by_coach: '코치 취소', cancelled_by_student: '수강생 취소', completed: '완료', hidden: '숨김' }[s] || s;
     }
 
     function formatDate(d) {
@@ -481,16 +488,16 @@
       tbody.innerHTML = bookings.map(b => `
         <tr>
           <td>${b.id}</td>
-          <td><strong>${b.student_name}</strong><br><span style="font-size:0.7rem;color:var(--text-muted);">${b.student_phone}</span></td>
-          <td><strong>${b.coach_name}</strong></td>
+          <td><strong>${escapeHtml(b.student_name)}</strong><br><span style="font-size:0.7rem;color:var(--text-muted);">${escapeHtml(b.student_phone)}</span></td>
+          <td><strong>${escapeHtml(b.coach_name)}</strong></td>
           <td>${planLabels[b.plan_type] || b.plan_type}</td>
           <td>${b.lesson_date}<br>${b.lesson_time}</td>
           <td>₩${Number(b.total_price).toLocaleString()}<br><span style="font-size:0.68rem;color:var(--text-muted);">레슨 ₩${Number(b.lesson_price).toLocaleString()} + 구장 ₩${Number(b.venue_price).toLocaleString()}</span></td>
-          <td>${b.venue_name ? b.venue_name : (b.status === 'coach_accepted' ? buildVenueSelect(b.id) : '<span style="color:var(--text-muted);font-size:0.75rem;">미배정</span>')}</td>
+          <td>${b.venue_name ? b.venue_name : (b.status === 'confirmed' && !b.venue_id ? buildVenueSelect(b.id) : '<span style="color:var(--text-muted);font-size:0.75rem;">미배정</span>')}</td>
           <td><span class="status-badge status-${b.status}">${statusLabel(b.status)}</span></td>
           <td>
             <div class="admin-actions">
-              ${b.status === 'coach_accepted' ? `<button class="btn-approve" onclick="assignVenue(${b.id})">구장 배정</button>` : ''}
+              ${b.status === 'confirmed' && !b.venue_id ? `<button class="btn-approve" onclick="assignVenue(${b.id})">구장 배정</button>` : ''}
             </div>
           </td>
         </tr>
@@ -538,6 +545,14 @@
         tab.classList.add('active');
         document.getElementById('panel-' + tab.dataset.panel).classList.add('active');
       });
+    });
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-action]');
+      if (!btn) return;
+      const action = btn.dataset.action;
+      const id = parseInt(btn.dataset.id);
+      if (action === 'delete-user') deleteUser(id, btn.dataset.name);
     });
 
     /* ----- Nav UI ----- */

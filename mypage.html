@@ -65,7 +65,31 @@
     }
     .empty-card-icon { font-size: 2rem; margin-bottom: 8px; }
 
+    /* Schedule management */
+    .schedule-grid { display: grid; gap: 8px; margin-bottom: 16px; }
+    .schedule-row {
+      display: flex; align-items: center; gap: 10px; padding: 10px;
+      background: white; border: 1px solid var(--border); border-radius: var(--radius);
+    }
+    .schedule-row label { font-size: 0.82rem; font-weight: 600; min-width: 36px; }
+    .schedule-row input[type="time"] {
+      padding: 4px 8px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+      font-size: 0.82rem; font-family: inherit;
+    }
+    .schedule-row .dash { color: var(--text-muted); }
+    .price-inputs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .price-input-group label { display: block; font-size: 0.72rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
+    .price-input-group input {
+      width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+      font-size: 0.85rem; font-family: inherit;
+    }
+    .region-select {
+      padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+      font-size: 0.85rem; font-family: inherit; width: 100%; margin-bottom: 16px;
+    }
+
     @media (max-width: 640px) {
+      .price-inputs { grid-template-columns: 1fr; }
       .info-grid { grid-template-columns: 1fr; }
       .mypage-header { flex-direction: column; text-align: center; }
     }
@@ -74,7 +98,7 @@
 <body>
 
   <!-- ===== NAVBAR ===== -->
-  <nav class="navbar">
+  <nav class="navbar" role="navigation" aria-label="메인 메뉴">
     <div class="container">
       <div class="nav-left">
         <a href="index.html" class="nav-logo">
@@ -131,6 +155,50 @@
         <div id="coach-bookings-list"></div>
       </div>
 
+      <!-- Coach schedule management -->
+      <div class="mypage-panel" id="panel-schedule">
+        <h3 style="font-size:0.85rem;font-weight:700;margin-bottom:16px;">스케줄 관리</h3>
+        <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:12px;">요일별 레슨 가능 시간을 설정하세요. 수강생은 이 시간대에서만 예약할 수 있습니다.</p>
+        <div class="schedule-grid" id="schedule-grid"></div>
+        <h3 style="font-size:0.85rem;font-weight:700;margin:20px 0 12px;">가격 설정</h3>
+        <div class="price-inputs" id="price-inputs">
+          <div class="price-input-group">
+            <label>체험 레슨 (1회)</label>
+            <input type="number" id="price-trial" placeholder="65000" />
+          </div>
+          <div class="price-input-group">
+            <label>정기 패키지 (8회)</label>
+            <input type="number" id="price-monthly" placeholder="440000" />
+          </div>
+          <div class="price-input-group">
+            <label>집중 캠프 (4회)</label>
+            <input type="number" id="price-camp" placeholder="260000" />
+          </div>
+        </div>
+        <button class="btn-book" style="max-width:200px;" id="save-schedule-btn">스케줄 저장</button>
+        <div id="schedule-msg" style="margin-top:10px;font-size:0.82rem;"></div>
+      </div>
+
+      <!-- Preferred region -->
+      <div class="mypage-panel" id="panel-region">
+        <h3 style="font-size:0.85rem;font-weight:700;margin-bottom:12px;">선호 지역 설정</h3>
+        <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:12px;">선호 지역을 설정하면 예약 시 해당 지역의 구장이 우선 배정됩니다.</p>
+        <select class="region-select" id="preferred-region">
+          <option value="">선택 안함</option>
+          <option value="서울 강남">서울 강남</option>
+          <option value="서울 송파">서울 송파</option>
+          <option value="서울 마포">서울 마포</option>
+          <option value="경기 수원">경기 수원</option>
+          <option value="경기 성남">경기 성남</option>
+          <option value="인천">인천</option>
+          <option value="부산">부산</option>
+          <option value="대구">대구</option>
+          <option value="대전">대전</option>
+        </select>
+        <button class="btn-book" style="max-width:200px;" id="save-region-btn">저장</button>
+        <div id="region-msg" style="margin-top:10px;font-size:0.82rem;"></div>
+      </div>
+
     </div>
   </div>
 
@@ -142,8 +210,10 @@
     }
 
     const statusLabels = {
-      pending: '대기 중', coach_accepted: '코치 수락 (구장 배정 중)',
-      confirmed: '확정', rejected: '거절됨'
+      pending: '대기 중', coach_accepted: '코치 수락',
+      confirmed: '확정', rejected: '거절됨',
+      cancelled_by_coach: '코치 취소', cancelled_by_student: '수강생 취소',
+      completed: '완료'
     };
     const planLabels = { trial: '체험 레슨 (60분)', monthly: '정기 패키지 8회', camp: '집중 캠프 4회' };
 
@@ -188,16 +258,26 @@
             </div>
           `;
 
-          // If approved coach, add coach bookings tab
+          // If approved coach, add coach bookings tab + schedule tab
           if (coach.status === 'approved') {
             const tabsEl = document.getElementById('mypage-tabs');
+
             const coachTab = document.createElement('button');
             coachTab.className = 'mypage-tab';
             coachTab.dataset.panel = 'coach-bookings';
-            coachTab.textContent = '받은 레슨 요청';
+            coachTab.textContent = '내 레슨 일정';
             tabsEl.appendChild(coachTab);
             coachTab.addEventListener('click', () => switchMypageTab(coachTab));
+
+            const scheduleTab = document.createElement('button');
+            scheduleTab.className = 'mypage-tab';
+            scheduleTab.dataset.panel = 'schedule';
+            scheduleTab.textContent = '스케줄 관리';
+            tabsEl.appendChild(scheduleTab);
+            scheduleTab.addEventListener('click', () => switchMypageTab(scheduleTab));
+
             loadCoachBookings();
+            loadScheduleUI(coach);
           }
         }
       } catch (e) { /* no coach */ }
@@ -253,6 +333,11 @@
               <span>레슨비: ₩${Number(b.lesson_price).toLocaleString()} + 구장·기구: ₩${Number(b.venue_price).toLocaleString()} = <strong>₩${Number(b.total_price).toLocaleString()}</strong></span>
               ${b.venue_name ? `<span>구장: ${b.venue_name} (${b.venue_address})</span>` : '<span>구장: 배정 대기 중</span>'}
             </div>
+            ${b.status === 'confirmed' ? `
+              <div class="booking-card-actions">
+                <button class="btn-reject" onclick="handleCancelBooking(${b.id})">예약 취소</button>
+              </div>
+            ` : ''}
           </div>
         `).join('');
       } catch (e) {
@@ -281,10 +366,9 @@
               <span>금액: ₩${Number(b.total_price).toLocaleString()}</span>
               ${b.venue_name ? `<span>구장: ${b.venue_name} (${b.venue_address})</span>` : ''}
             </div>
-            ${b.status === 'pending' ? `
+            ${b.status === 'confirmed' ? `
               <div class="booking-card-actions">
-                <button class="btn-approve" onclick="handleCoachRespond(${b.id}, 'accept')">수락</button>
-                <button class="btn-reject" onclick="handleCoachRespond(${b.id}, 'reject')">거절</button>
+                <button class="btn-reject" onclick="handleCancelBooking(${b.id})">레슨 취소</button>
               </div>
             ` : ''}
           </div>
@@ -294,15 +378,116 @@
       }
     }
 
-    async function handleCoachRespond(bookingId, action) {
-      const label = action === 'accept' ? '수락' : '거절';
-      if (!confirm(`이 레슨을 ${label}하시겠습니까?`)) return;
+    async function handleCancelBooking(bookingId) {
+      if (!confirm('이 예약을 정말 취소하시겠습니까?')) return;
       try {
-        await respondToBooking(bookingId, action);
-        alert(`✅ ${label}되었습니다.`);
+        await cancelBooking(bookingId);
+        alert('예약이 취소되었습니다.');
+        loadMyBookings();
         loadCoachBookings();
       } catch (err) {
         alert(err.message);
+      }
+    }
+
+    /* ----- 선호 지역 탭 추가 ----- */
+    (function() {
+      const tabsEl = document.getElementById('mypage-tabs');
+      const regionTab = document.createElement('button');
+      regionTab.className = 'mypage-tab';
+      regionTab.dataset.panel = 'region';
+      regionTab.textContent = '선호 지역';
+      tabsEl.appendChild(regionTab);
+      regionTab.addEventListener('click', () => switchMypageTab(regionTab));
+    })();
+
+    const saveRegionBtn = document.getElementById('save-region-btn');
+    if (saveRegionBtn) {
+      saveRegionBtn.addEventListener('click', async () => {
+        const region = document.getElementById('preferred-region').value;
+        try {
+          await updateProfile({ preferred_region: region });
+          document.getElementById('region-msg').innerHTML = '<span style="color:var(--green);">저장되었습니다.</span>';
+        } catch (err) {
+          document.getElementById('region-msg').innerHTML = `<span style="color:#DC2626;">${err.message}</span>`;
+        }
+      });
+    }
+
+    /* ----- 스케줄 관리 UI ----- */
+    const DAY_NAMES = ['일', '월', '화', '수', '목', '금', '토'];
+
+    async function loadScheduleUI(coach) {
+      const grid = document.getElementById('schedule-grid');
+      if (!grid) return;
+
+      // 현재 스케줄 로드
+      let currentSchedules = [];
+      try {
+        const { schedules } = await getMySchedule();
+        currentSchedules = schedules;
+      } catch (e) { /* no schedule yet */ }
+
+      // 요일별 행 생성
+      grid.innerHTML = DAY_NAMES.map((name, i) => {
+        const existing = currentSchedules.find(s => s.day_of_week === i);
+        return `
+          <div class="schedule-row">
+            <input type="checkbox" id="sch-check-${i}" ${existing ? 'checked' : ''} />
+            <label for="sch-check-${i}">${name}</label>
+            <input type="time" id="sch-start-${i}" value="${existing ? existing.start_time : '09:00'}" />
+            <span class="dash">~</span>
+            <input type="time" id="sch-end-${i}" value="${existing ? existing.end_time : '18:00'}" />
+          </div>
+        `;
+      }).join('');
+
+      // 가격 로드
+      const trialInput = document.getElementById('price-trial');
+      const monthlyInput = document.getElementById('price-monthly');
+      const campInput = document.getElementById('price-camp');
+      if (trialInput) trialInput.value = coach.trial_price || 65000;
+      if (monthlyInput) monthlyInput.value = coach.monthly_price || 440000;
+      if (campInput) campInput.value = coach.camp_price || 260000;
+
+      // 저장 버튼
+      const saveBtn = document.getElementById('save-schedule-btn');
+      if (saveBtn) {
+        saveBtn.addEventListener('click', async () => {
+          const schedules = [];
+          for (let i = 0; i < 7; i++) {
+            const checked = document.getElementById(`sch-check-${i}`).checked;
+            if (checked) {
+              schedules.push({
+                day_of_week: i,
+                start_time: document.getElementById(`sch-start-${i}`).value,
+                end_time: document.getElementById(`sch-end-${i}`).value,
+                is_active: 1
+              });
+            }
+          }
+
+          const msg = document.getElementById('schedule-msg');
+          try {
+            await saveMySchedule(schedules);
+
+            // 가격도 저장
+            const prices = {};
+            const tp = parseInt(trialInput.value);
+            const mp = parseInt(monthlyInput.value);
+            const cp = parseInt(campInput.value);
+            if (!isNaN(tp)) prices.trial_price = tp;
+            if (!isNaN(mp)) prices.monthly_price = mp;
+            if (!isNaN(cp)) prices.camp_price = cp;
+            if (Object.keys(prices).length > 0) {
+              await updateMyPrices(prices);
+            }
+
+            msg.innerHTML = '<span style="color:var(--green);">스케줄과 가격이 저장되었습니다!</span>';
+          } catch (err) {
+            msg.innerHTML = `<span style="color:#DC2626;">${err.message}</span>`;
+          }
+        });
       }
     }
 

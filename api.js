@@ -99,6 +99,54 @@ async function registerVenue(venueData) {
   });
 }
 
+/* ---------- 코치 목록/상세 ---------- */
+async function getCoachList(region) {
+  const query = region ? `?region=${encodeURIComponent(region)}` : '';
+  return apiFetch(`/coaches/list${query}`);
+}
+
+async function getCoachDetail(coachId) {
+  return apiFetch(`/coaches/detail/${encodeURIComponent(coachId)}`);
+}
+
+async function getAvailableSlots(coachId, date) {
+  return apiFetch(`/coaches/detail/${encodeURIComponent(coachId)}/available-slots?date=${encodeURIComponent(date)}`);
+}
+
+/* ---------- 코치 스케줄 관리 ---------- */
+async function getMySchedule() {
+  return apiFetch('/coaches/my/schedule');
+}
+
+async function saveMySchedule(schedules) {
+  return apiFetch('/coaches/my/schedule', {
+    method: 'PUT',
+    body: JSON.stringify({ schedules })
+  });
+}
+
+async function updateMyPrices(prices) {
+  return apiFetch('/coaches/my/prices', {
+    method: 'PATCH',
+    body: JSON.stringify(prices)
+  });
+}
+
+/* ---------- 사용자 프로필 ---------- */
+async function updateProfile(data) {
+  return apiFetch('/auth/profile', {
+    method: 'PATCH',
+    body: JSON.stringify(data)
+  });
+}
+
+/* ---------- 예약 취소 ---------- */
+async function cancelBooking(bookingId) {
+  return apiFetch(`/bookings/${encodeURIComponent(bookingId)}/cancel`, {
+    method: 'POST'
+  });
+}
+
 /* ---------- 레슨 예약 ---------- */
 async function createBooking(data) {
   return apiFetch('/bookings', {

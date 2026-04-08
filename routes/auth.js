@@ -122,4 +122,23 @@ router.get('/me', authenticateToken, (req, res) => {
   }
 });
 
+// PATCH /api/auth/profile — update profile (preferred_region)
+router.patch('/profile', authenticateToken, (req, res) => {
+  try {
+    const { preferred_region } = req.body;
+
+    if (preferred_region !== undefined) {
+      if (typeof preferred_region !== 'string' || preferred_region.length > 100) {
+        return res.status(400).json({ error: '유효하지 않은 지역입니다.' });
+      }
+      db.prepare('UPDATE users SET preferred_region = ? WHERE id = ?').run(preferred_region, req.user.id);
+    }
+
+    res.json({ message: '프로필이 수정되었습니다.' });
+  } catch (err) {
+    console.error('Profile update error:', err.message);
+    res.status(500).json({ error: '프로필 수정 중 오류가 발생했습니다.' });
+  }
+});
+
 module.exports = router;

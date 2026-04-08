@@ -5,6 +5,12 @@ const { requireAdmin } = require('../middleware/admin');
 
 const router = express.Router();
 
+function auditLog(userId, action, targetType, targetId, detail) {
+  try {
+    db.prepare('INSERT INTO audit_log (user_id, action, target_type, target_id, detail) VALUES (?, ?, ?, ?, ?)').run(userId, action, targetType, targetId, detail || null);
+  } catch (e) { /* ignore */ }
+}
+
 // All admin routes require auth + admin
 router.use(authenticateToken, requireAdmin);
 
@@ -12,26 +18,29 @@ router.use(authenticateToken, requireAdmin);
 router.get('/stats', (req, res) => {
   try {
     const totalUsers = db.prepare('SELECT COUNT(*) as count FROM users').get().count;
-    const totalCoaches = db.prepare('SELECT COUNT(*) as count FROM coaches').get().count;
-    const pendingCoaches = db.prepare("SELECT COUNT(*) as count FROM coaches WHERE status = 'pending'").get().count;
-    const approvedCoaches = db.prepare("SELECT COUNT(*) as count FROM coaches WHERE status = 'approved'").get().count;
-    const rejectedCoaches = db.prepare("SELECT COUNT(*) as count FROM coaches WHERE status = 'rejected'").get().count;
-    const totalVenues = db.prepare('SELECT COUNT(*) as count FROM venues').get().count;
-    const pendingVenues = db.prepare("SELECT COUNT(*) as count FROM venues WHERE status = 'pending'").get().count;
-    const approvedVenues = db.prepare("SELECT COUNT(*) as count FROM venues WHERE status = 'approved'").get().count;
-    const rejectedVenues = db.prepare("SELECT COUNT(*) as count FROM venues WHERE status = 'rejected'").get().count;
 
-    const totalBookings = db.prepare('SELECT COUNT(*) as count FROM bookings').get().count;
-    const pendingBookings = db.prepare("SELECT COUNT(*) as count FROM bookings WHERE status = 'pending'").get().count;
-    const acceptedBookings = db.prepare("SELECT COUNT(*) as count FROM bookings WHERE status = 'coach_accepted'").get().count;
-    const confirmedBookings = db.prepare("SELECT COUNT(*) as count FROM bookings WHERE status = 'confirmed'").get().count;
-    const rejectedBookings = db.prepare("SELECT COUNT(*) as count FROM bookings WHERE status = 'rejected'").get().count;
+    const coachStats = db.prepare("SELECT status, COUNT(*) as count FROM coaches GROUP BY status").all();
+    const coachMap = {};
+    let totalCoaches = 0;
+    coachStats.forEach(r => { coachMap[r.status] = r.count; totalCoaches += r.count; });
+
+    const venueStats = db.prepare("SELECT status, COUNT(*) as count FROM venues GROUP BY status").all();
+    const venueMap = {};
+    let totalVenues = 0;
+    venueStats.forEach(r => { venueMap[r.status] = r.count; totalVenues += r.count; });
+
+    const bookingStats = db.prepare("SELECT status, COUNT(*) as count FROM bookings GROUP BY status").all();
+    const bookingMap = {};
+    let totalBookings = 0;
+    bookingStats.forEach(r => { bookingMap[r.status] = r.count; totalBookings += r.count; });
+
+    const noVenueBookings = db.prepare("SELECT COUNT(*) as count FROM bookings WHERE status = 'confirmed' AND venue_id IS NULL").get().count;
 
     res.json({
       users: { total: totalUsers },
-      coaches: { total: totalCoaches, pending: pendingCoaches, approved: approvedCoaches, rejected: rejectedCoaches },
-      venues: { total: totalVenues, pending: pendingVenues, approved: approvedVenues, rejected: rejectedVenues },
-      bookings: { total: totalBookings, pending: pendingBookings, coach_accepted: acceptedBookings, confirmed: confirmedBookings, rejected: rejectedBookings }
+      coaches: { total: totalCoaches, pending: coachMap.pending || 0, approved: coachMap.approved || 0, rejected: coachMap.rejected || 0 },
+      venues: { total: totalVenues, pending: venueMap.pending || 0, approved: venueMap.approved || 0, rejected: venueMap.rejected || 0 },
+      bookings: { total: totalBookings, pending: bookingMap.pending || 0, confirmed: bookingMap.confirmed || 0, no_venue: noVenueBookings, cancelled_by_coach: bookingMap.cancelled_by_coach || 0, cancelled_by_student: bookingMap.cancelled_by_student || 0 }
     });
   } catch (err) {
     console.error('Admin stats error:', err.message);
@@ -42,7 +51,7 @@ router.get('/stats', (req, res) => {
 // GET /api/admin/users — list all users
 router.get('/users', (req, res) => {
   try {
-    const users = db.prepare('SELECT id, name, email, phone, is_admin, created_at FROM users ORDER BY created_at DESC').all();
+    const users = db.prepare('SELECT id, name, email, phone, is_admin, created_at FROM users ORDER BY created_at DESC LIMIT 200').all();
     res.json({ users });
   } catch (err) {
     console.error('Admin users error:', err.message);
@@ -56,7 +65,7 @@ router.get('/coaches', (req, res) => {
     const coaches = db.prepare(`
       SELECT c.*, u.name, u.email, u.phone
       FROM coaches c JOIN users u ON c.user_id = u.id
-      ORDER BY c.created_at DESC
+      ORDER BY c.created_at DESC LIMIT 200
     `).all();
     res.json({ coaches });
   } catch (err) {
@@ -68,14 +77,18 @@ router.get('/coaches', (req, res) => {
 // PATCH /api/admin/coaches/:id — approve or reject
 router.patch('/coaches/:id', (req, res) => {
   try {
+    const id = parseInt(req.params.id);
+    if (!id || id <= 0) return res.status(400).json({ error: '유효하지 않은 ID입니다.' });
+
     const { status } = req.body;
     if (!['approved', 'rejected'].includes(status)) {
       return res.status(400).json({ error: '유효하지 않은 상태입니다.' });
     }
-    const result = db.prepare('UPDATE coaches SET status = ? WHERE id = ?').run(status, req.params.id);
+    const result = db.prepare('UPDATE coaches SET status = ? WHERE id = ?').run(status, id);
     if (result.changes === 0) {
       return res.status(404).json({ error: '코치 신청을 찾을 수 없습니다.' });
     }
+    auditLog(req.user.id, status === 'approved' ? 'coach_approve' : 'coach_reject', 'coach', id);
     res.json({ message: status === 'approved' ? '승인되었습니다.' : '거절되었습니다.' });
   } catch (err) {
     console.error('Admin coach update error:', err.message);
@@ -89,7 +102,7 @@ router.get('/venues', (req, res) => {
     const venues = db.prepare(`
       SELECT v.*, u.name as owner_name, u.email as owner_email, u.phone as owner_phone
       FROM venues v JOIN users u ON v.user_id = u.id
-      ORDER BY v.created_at DESC
+      ORDER BY v.created_at DESC LIMIT 200
     `).all();
     res.json({ venues });
   } catch (err) {
@@ -101,14 +114,18 @@ router.get('/venues', (req, res) => {
 // PATCH /api/admin/venues/:id — approve or reject
 router.patch('/venues/:id', (req, res) => {
   try {
+    const id = parseInt(req.params.id);
+    if (!id || id <= 0) return res.status(400).json({ error: '유효하지 않은 ID입니다.' });
+
     const { status } = req.body;
     if (!['approved', 'rejected'].includes(status)) {
       return res.status(400).json({ error: '유효하지 않은 상태입니다.' });
     }
-    const result = db.prepare('UPDATE venues SET status = ? WHERE id = ?').run(status, req.params.id);
+    const result = db.prepare('UPDATE venues SET status = ? WHERE id = ?').run(status, id);
     if (result.changes === 0) {
       return res.status(404).json({ error: '구장 신청을 찾을 수 없습니다.' });
     }
+    auditLog(req.user.id, status === 'approved' ? 'venue_approve' : 'venue_reject', 'venue', id);
     res.json({ message: status === 'approved' ? '승인되었습니다.' : '거절되었습니다.' });
   } catch (err) {
     console.error('Admin venue update error:', err.message);
@@ -123,12 +140,11 @@ router.delete('/users/:id', (req, res) => {
       return res.status(400).json({ error: '자기 자신은 삭제할 수 없습니다.' });
     }
     db.prepare('DELETE FROM notifications WHERE user_id = ?').run(req.params.id);
-    db.prepare('DELETE FROM coaches WHERE user_id = ?').run(req.params.id);
-    db.prepare('DELETE FROM venues WHERE user_id = ?').run(req.params.id);
-    const result = db.prepare('DELETE FROM users WHERE id = ?').run(req.params.id);
+    const result = db.prepare("UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?").run(req.params.id);
     if (result.changes === 0) {
       return res.status(404).json({ error: '사용자를 찾을 수 없습니다.' });
     }
+    auditLog(req.user.id, 'user_delete', 'user', parseInt(req.params.id));
     res.json({ message: '삭제되었습니다.' });
   } catch (err) {
     console.error('Admin user delete error:', err.message);
@@ -150,7 +166,7 @@ router.get('/bookings', (req, res) => {
       JOIN coaches c ON b.coach_id = c.id
       JOIN users u_c ON c.user_id = u_c.id
       LEFT JOIN venues v ON b.venue_id = v.id
-      ORDER BY b.created_at DESC
+      ORDER BY b.created_at DESC LIMIT 200
     `).all();
     res.json({ bookings });
   } catch (err) {
